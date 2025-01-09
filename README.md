@@ -1,12 +1,12 @@
-# Controle de Ponto - Teste Ilumeo
+# Controle de Ponto - Ilumeo
 
-Projeto para o teste técnico Ilumeo.
+Projeto para o teste técnico Ilumeo utilizando Next.js.
 
 ## Estrutura do Repositório
 
-- **client/**: Front-end (React + TypeScript).
-- **server/**: Back-end (Node.js + TypeScript).
+- **/pages/api:** Rotas do back-end (API).
+- **/pages:** Páginas da aplicação front-end.
 
-## Como começar?
+## Como rodar o projeto?
 
 Em breve, veja as instruções de configuração.
