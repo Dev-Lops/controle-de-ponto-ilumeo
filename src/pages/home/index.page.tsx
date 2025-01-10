@@ -6,6 +6,8 @@ import { useRouter } from "next/router";
 import { ButtonComponent } from "@/components/button";
 import { userCodeSchema } from "@/validations/userValidations";
 import { NextSeo } from "next-seo";
+import { Plus } from "@phosphor-icons/react";
+import { functionsIn } from "cypress/types/lodash";
 
 // Define a tipagem do formulário com base no schema do Zod
 type FormData = z.infer<typeof userCodeSchema>;
@@ -41,6 +43,10 @@ export default function Home() {
     }
   };
 
+  function handleNewUser() {
+    router.push(`/admin/verify`);
+  }
+
   return (
     <>
       <NextSeo
@@ -64,9 +70,17 @@ export default function Home() {
       <div className="flex flex-col items-center justify-center h-screen px-4 sm:px-6 bg-background text-foreground">
         <div className="flex flex-col w-full max-w-sm">
           {/* Cabeçalho */}
-          <h1 className="text-3xl text-start font-light mb-8">
-            Ponto <span className="font-bold">Ilumeo</span>
-          </h1>
+          <div className="flex justify-between items-center mb-8">
+            <h1 className="text-3xl text-start font-light ">
+              Ponto <span className="font-bold">Ilumeo</span>
+            </h1>
+
+            <ButtonComponent
+              onClick={handleNewUser}
+              text={<Plus size={32} />}
+              className="bg-transparent text-orange-400 hover:bg-transparent hover:text-orange-600"
+            />
+          </div>
 
           {/* Formulário */}
           <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col">
