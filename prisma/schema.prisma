@@ -1,17 +1,18 @@
+generator client {
+  provider   = "prisma-client-js"
+  engineType = "binary"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-generator client {
-  provider = "prisma-client-js"
-}
-
 model User {
   id        String        @id @default(uuid())
-  code_name String        @unique
   name      String
   createdAt DateTime      @default(now())
+  code_name String        @unique
   sessions  WorkSession[]
 }
 
