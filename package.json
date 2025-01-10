@@ -5,12 +5,14 @@
   "license": "MIT",
   "scripts": {
     "dev": "next dev",
+    "prisma:migrate": "prisma migrate deploy",
     "build": "prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
     "seed": "ts-node --transpile-only prisma/seed.ts",
     "test:e2e": "cypress open",
-    "test:e2e:run": "cypress run"
+    "test:e2e:run": "cypress run",
+    "postinstall": "prisma generate"
   },
   "prisma": {
     "seed": "ts-node --transpile-only prisma/seed.ts"
