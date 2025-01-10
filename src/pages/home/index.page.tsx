@@ -47,7 +47,7 @@ export default function Home() {
         title="Página Inicial - Controle de Ponto"
         description="Gerencie suas horas de trabalho com a aplicação Controle de Ponto Ilumeo."
         openGraph={{
-          title: "Página Inicial - Controle de Ponto",
+          title: "Home - Controle de Ponto",
           description:
             "Gerencie suas horas de trabalho com a aplicação Controle de Ponto Ilumeo.",
           url: "https://www.seusite.com/",

@@ -6,16 +6,24 @@
   --background: #ffffff;
   --foreground: #151f2b;
 
-  --input: #f4f4f4; /* Fundo do input */
-  --input-border: #dcdcdc; /* Borda do input */
-  --input-placeholder: #888888; /* Placeholder do input */
+  --input: #f4f4f4;
+  /* Fundo do input */
+  --input-border: #dcdcdc;
+  /* Borda do input */
+  --input-placeholder: #888888;
+  /* Placeholder do input */
 
-  --button: #fe8a00; /* Fundo do botão */
-  --button-text: #ffffff; /* Texto do botão */
-  --button-hover: #e67900; /* Cor ao passar o mouse no botão */
+  --button: #fe8a00;
+  /* Fundo do botão */
+  --button-text: #ffffff;
+  /* Texto do botão */
+  --button-hover: #e67900;
+  /* Cor ao passar o mouse no botão */
 
-  --border: #e0e0e0; /* Cor de bordas gerais */
-  --shadow: rgba(0, 0, 0, 0.1); /* Sombra leve */
+  --border: #e0e0e0;
+  /* Cor de bordas gerais */
+  --shadow: rgba(0, 0, 0, 0.1);
+  /* Sombra leve */
 }
 
 @media (prefers-color-scheme: dark) {
@@ -23,16 +31,24 @@
     --background: #151f2b;
     --foreground: #ededed;
 
-    --input: #1e2733; /* Fundo do input */
-    --input-border: #3b4a5b; /* Borda do input */
-    --input-placeholder: #8995a5; /* Placeholder do input */
+    --input: #1e2733;
+    /* Fundo do input */
+    --input-border: #3b4a5b;
+    /* Borda do input */
+    --input-placeholder: #8995a5;
+    /* Placeholder do input */
 
-    --button: #fe8a00; /* Fundo do botão */
-    --button-text: #151f2b; /* Texto do botão */
-    --button-hover: #e67900; /* Cor ao passar o mouse no botão */
+    --button: #fe8a00;
+    /* Fundo do botão */
+    --button-text: #151f2b;
+    /* Texto do botão */
+    --button-hover: #e67900;
+    /* Cor ao passar o mouse no botão */
 
-    --border: #2a3542; /* Cor de bordas gerais */
-    --shadow: rgba(0, 0, 0, 0.3); /* Sombra mais forte */
+    --border: #2a3542;
+    /* Cor de bordas gerais */
+    --shadow: rgba(0, 0, 0, 0.3);
+    /* Sombra mais forte */
   }
 }
 
