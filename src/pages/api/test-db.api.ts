@@ -1,10 +1,7 @@
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextApiResponse } from "next";
 import { prisma } from "@/lib/prisma";
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+export default async function handler(res: NextApiResponse) {
   try {
     // Tenta conectar ao banco de dados
     await prisma.$connect();
