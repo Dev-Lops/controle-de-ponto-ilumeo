@@ -136,7 +136,7 @@ export default function UserPage({ user }: UserPageProps) {
 
   if (!user) {
     return (
-      <div className="flex flex-col items-center justify-center h-screen">
+      <div className="flex w-[365px] m-auto flex-col items-center justify-center h-screen">
         <p className="text-red-500 text-lg mb-4">Usuário não encontrado.</p>
         <ButtonComponent
           text="Retornar à Home"
