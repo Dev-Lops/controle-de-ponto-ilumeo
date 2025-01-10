@@ -59,9 +59,9 @@ export default function Home() {
           url: "https://www.seusite.com/",
           images: [
             {
-              url: "https://www.seusite.com/imagem-home.png",
-              width: 1200,
-              height: 630,
+              url: "https://www.seusite.com/favicon.svg",
+              width: 500,
+              height: 500,
               alt: "Página Inicial do Controle de Ponto",
             },
           ],
