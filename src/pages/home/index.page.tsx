@@ -7,7 +7,6 @@ import { ButtonComponent } from "@/components/button";
 import { userCodeSchema } from "@/validations/userValidations";
 import { NextSeo } from "next-seo";
 import { Plus } from "@phosphor-icons/react";
-import { functionsIn } from "cypress/types/lodash";
 
 // Define a tipagem do formulário com base no schema do Zod
 type FormData = z.infer<typeof userCodeSchema>;

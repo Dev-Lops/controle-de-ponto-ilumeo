@@ -132,6 +132,7 @@ export const getServerSideProps: GetServerSideProps<UserPageProps> = async (
       props: { user: { ...user, createdAt: user.createdAt.toISOString() } },
     };
   } catch (error) {
+    console.error("Erro ao buscar o usuário:", error);
     return { props: { user: null } };
   }
 };
