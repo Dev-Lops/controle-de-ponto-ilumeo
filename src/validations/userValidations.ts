@@ -9,3 +9,11 @@ export const userCodeSchema = z.object({
       message: "O código deve conter apenas letras e números",
     }),
 });
+
+export const userSchema = z.object({
+  name: z.string().min(1, "O nome é obrigatório."),
+  code_name: z
+    .string()
+    .min(1, "O código é obrigatório.")
+    .regex(/^[A-Z0-9]+$/, "O código deve conter apenas letras e números."),
+});

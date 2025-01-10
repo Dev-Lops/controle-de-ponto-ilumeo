@@ -5,6 +5,7 @@ import { ButtonComponent } from "@/components/button";
 import { ArrowCircleLeft } from "@phosphor-icons/react";
 import { useTimer } from "@/hooks/userTime";
 import { NextSeo } from "next-seo";
+import { Skeleton } from "@/components/skeleton"; // Componente Skeleton para fallback de carregamento
 
 interface UserPageProps {
   user: {
@@ -31,8 +32,14 @@ export default function UserPage({ user }: UserPageProps) {
     );
   }
 
-  const { isClockRunning, currentTime, totalDuration, sessions, toggleClock } =
-    useTimer(user.code_name);
+  const {
+    isClockRunning,
+    currentTime,
+    totalDuration,
+    sessions,
+    toggleClock,
+    loading,
+  } = useTimer(user.code_name);
 
   return (
     <>
@@ -51,27 +58,45 @@ export default function UserPage({ user }: UserPageProps) {
             <p>{user.name}</p>
           </div>
         </header>
+
         <div className="flex flex-col items-start w-full pb-4">
-          <div className="flex items-center gap-2">
-            <p className="text-3xl font-bold">{currentTime}</p>
-            {isClockRunning && (
-              <span className="w-3 h-3 bg-lime-300 rounded-full animate-pulse"></span>
-            )}
-          </div>
-          <p className="text-xs pb-2">Horas de hoje</p>
-          <div className="flex w-full text-sm justify-between mb-3">
-            <p>Horas totais</p>
-            <span className="text-orange-400">{totalDuration}</span>
-          </div>
-          <ButtonComponent
-            text={isClockRunning ? "Hora de saída" : "Hora de entrada"}
-            onClick={toggleClock}
-            className="w-full bg-orange-500 hover:bg-orange-600 text-black"
-          />
+          {loading ? (
+            <>
+              <Skeleton width="50%" height="2rem" className="mb-2" />
+              <Skeleton width="80%" height="1.5rem" />
+            </>
+          ) : (
+            <>
+              <div className="flex items-center gap-2">
+                <p className="text-3xl font-bold">{currentTime}</p>
+                {isClockRunning && (
+                  <span className="w-3 h-3 bg-lime-300 rounded-full animate-pulse"></span>
+                )}
+              </div>
+              <p className="text-xs pb-2">Horas de hoje</p>
+              <div className="flex w-full text-sm justify-between mb-3">
+                <p>Horas totais</p>
+                <span className="text-orange-400">{totalDuration}</span>
+              </div>
+              <ButtonComponent
+                text={isClockRunning ? "Hora de saída" : "Hora de entrada"}
+                onClick={toggleClock}
+                className="w-full bg-orange-500 hover:bg-orange-600 text-black"
+              />
+            </>
+          )}
         </div>
+
         <main className="flex flex-col w-full">
           <h3 className="text-start mb-2 font-semibold">Dias anteriores</h3>
-          {sessions.length > 0 ? (
+          {loading ? (
+            Array.from({ length: 8 }).map((_, index) => (
+              <div
+                key={index}
+                className="p-6 bg-input rounded mb-2 animate-pulse"
+              />
+            ))
+          ) : sessions.length > 0 ? (
             <ul className="flex flex-col gap-2">
               {sessions.map((session) => (
                 <li

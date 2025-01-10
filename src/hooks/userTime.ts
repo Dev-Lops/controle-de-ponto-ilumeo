@@ -9,6 +9,7 @@ export function useTimer(userCode: string) {
   const [currentTime, setCurrentTime] = useState("0h 00m");
   const [sessions, setSessions] = useState<Session[]>([]);
   const [totalDuration, setTotalDuration] = useState("0h 00m");
+  const [loading, setLoading] = useState(true); // Estado de carregamento
 
   useEffect(() => {
     loadSessions();
@@ -51,6 +52,8 @@ export function useTimer(userCode: string) {
       setSessions(formattedSessions);
     } catch (error) {
       console.error("Erro ao carregar sessões:", error);
+    } finally {
+      setLoading(false); // Finaliza o carregamento
     }
   };
 
@@ -60,6 +63,7 @@ export function useTimer(userCode: string) {
       setStartTime(savedStartTime);
       setIsClockRunning(true);
     }
+    setLoading(false); // Finaliza o carregamento após verificar o estado
   };
 
   const toggleClock = async () => {
@@ -103,5 +107,6 @@ export function useTimer(userCode: string) {
     totalDuration,
     sessions,
     toggleClock,
+    loading, // Retorna o estado de carregamento
   };
 }

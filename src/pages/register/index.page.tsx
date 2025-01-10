@@ -7,16 +7,8 @@ import { useRouter } from "next/router";
 import { ButtonComponent } from "@/components/button";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { api } from "@/lib/axios";
 import axios from "axios";
-
-const userSchema = z.object({
-  name: z.string().min(1, "O nome é obrigatório."),
-  code_name: z
-    .string()
-    .min(1, "O código é obrigatório.")
-    .regex(/^[A-Z0-9]+$/, "O código deve conter apenas letras e números."),
-});
+import { userSchema } from "@/validations/userValidations";
 
 type UserFormData = z.infer<typeof userSchema>;
 
