@@ -1,4 +1,8 @@
 import { api } from "@/lib/axios";
+import dayjs from "dayjs";
+import duration from "dayjs/plugin/duration";
+
+dayjs.extend(duration);
 
 export interface Session {
   id: string;
@@ -7,45 +11,75 @@ export interface Session {
   duration: string;
 }
 
+export interface CreateSessionInput {
+  codeName: string;
+  startTime: string;
+  endTime: string;
+}
+
+const API_ENDPOINTS = {
+  FETCH_SESSIONS: "/sessions",
+  SAVE_SESSION: "/sessions",
+};
+
+type Duration = ReturnType<typeof dayjs.duration>;
+
 export class SessionService {
   async fetchSessions(codeName: string): Promise<Session[]> {
-    const response = await api.get("/sessions", {
-      params: { codeName },
-    });
-    return response.data;
+    if (!codeName) throw new Error("CodeName não pode ser vazio.");
+
+    try {
+      const response = await api.get(API_ENDPOINTS.FETCH_SESSIONS, {
+        params: { codeName },
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Erro ao buscar sessões:", error);
+      throw new Error("Não foi possível buscar sessões.");
+    }
   }
 
-  async saveSession(session: {
-    codeName: string;
-    startTime: string;
-    endTime: string;
-  }): Promise<Session> {
-    const response = await api.post("/sessions", session);
-    return response.data;
+  async saveSession(session: CreateSessionInput): Promise<Session> {
+    if (!session.codeName || !session.startTime || !session.endTime) {
+      throw new Error("Dados da sessão estão incompletos.");
+    }
+
+    try {
+      const response = await api.post(API_ENDPOINTS.SAVE_SESSION, session);
+      return response.data;
+    } catch (error) {
+      console.error("Erro ao salvar sessão:", error);
+      throw new Error("Não foi possível salvar a sessão.");
+    }
   }
 
   calculateDuration(start: Date, end: Date): string {
-    const elapsed = end.getTime() - start.getTime();
-    const hours = Math.floor(elapsed / (1000 * 60 * 60));
-    const minutes = Math.floor((elapsed % (1000 * 60 * 60)) / (1000 * 60));
-    return `${hours}h ${minutes}m`;
+    const durationObj = dayjs.duration(dayjs(end).diff(dayjs(start)));
+    return this.formatDuration(durationObj);
   }
 
   calculateTotalDuration(sessions: Session[], currentElapsed: number): string {
-    let totalMilliseconds = sessions.reduce((acc, session) => {
-      const start = new Date(session.start_time).getTime();
-      const end = session.end_time
-        ? new Date(session.end_time).getTime()
-        : Date.now();
-      return acc + (end - start);
-    }, 0);
+    const totalMilliseconds = sessions.reduce((acc, session) => {
+      return (
+        acc + this.calculateElapsedTime(session.start_time, session.end_time)
+      );
+    }, currentElapsed);
 
-    totalMilliseconds += currentElapsed;
+    return this.formatDuration(dayjs.duration(totalMilliseconds));
+  }
 
-    const hours = Math.floor(totalMilliseconds / (1000 * 60 * 60));
-    const minutes = Math.floor(
-      (totalMilliseconds % (1000 * 60 * 60)) / (1000 * 60)
-    );
+  private calculateElapsedTime(
+    startTime: string,
+    endTime: string | null
+  ): number {
+    const start = dayjs(startTime);
+    const end = endTime ? dayjs(endTime) : dayjs();
+    return end.diff(start);
+  }
+
+  private formatDuration(durationObj: Duration): string {
+    const hours = Math.floor(durationObj.asHours());
+    const minutes = durationObj.minutes();
     return `${hours}h ${minutes}m`;
   }
 }

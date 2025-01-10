@@ -1,21 +1,9 @@
 import { GetServerSideProps } from "next";
 import { prisma } from "@/lib/prisma";
-import { ButtonComponent } from "@/components/button";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import { Session, SessionService } from "@/services/sessionService";
+import { ButtonComponent } from "@/components/button";
 import { ArrowCircleLeft } from "@phosphor-icons/react";
-
-// Utils para manipulação do localStorage
-const TimerStorage = {
-  saveStartTime: (startTime: Date) =>
-    localStorage.setItem("timerStartTime", startTime.toISOString()),
-  getStartTime: (): Date | null => {
-    const savedTime = localStorage.getItem("timerStartTime");
-    return savedTime ? new Date(savedTime) : null;
-  },
-  clearStartTime: () => localStorage.removeItem("timerStartTime"),
-};
+import { useTimer } from "@/hooks/userTime";
 
 interface UserPageProps {
   user: {
@@ -28,137 +16,35 @@ interface UserPageProps {
 
 export default function UserPage({ user }: UserPageProps) {
   const router = useRouter();
-  const sessionService = new SessionService();
-
-  const [isClockRunning, setIsClockRunning] = useState(false);
-  const [startTime, setStartTime] = useState<Date | null>(null);
-  const [currentTime, setCurrentTime] = useState("0h 00m");
-  const [sessions, setSessions] = useState<Session[]>([]);
-  const [totalDuration, setTotalDuration] = useState("0h 00m");
-
-  // Carrega sessões e restaura o estado do timer
-  useEffect(() => {
-    if (user) {
-      loadSessions();
-      restoreTimerState();
-    }
-  }, [user]);
-
-  useEffect(() => {
-    let interval: NodeJS.Timeout | undefined;
-    if (isClockRunning && startTime) {
-      interval = setInterval(() => {
-        const now = new Date();
-        const elapsed = now.getTime() - startTime.getTime();
-        setCurrentTime(sessionService.calculateDuration(startTime, now));
-        setTotalDuration(
-          sessionService.calculateTotalDuration(sessions, elapsed)
-        );
-      }, 1000);
-    } else {
-      setTotalDuration(sessionService.calculateTotalDuration(sessions, 0));
-    }
-    return () => clearInterval(interval);
-  }, [isClockRunning, startTime, sessions]);
-
-  const loadSessions = async () => {
-    if (!user?.code_name) {
-      console.error("Erro: Usuário ou código do usuário não definido.");
-      return;
-    }
-
-    try {
-      const fetchedSessions = await sessionService.fetchSessions(
-        user.code_name
-      );
-      const formattedSessions = fetchedSessions.map((session) => {
-        const start = new Date(session.start_time);
-        const end = session.end_time ? new Date(session.end_time) : new Date();
-
-        return {
-          ...session,
-          duration: sessionService.calculateDuration(start, end),
-        };
-      });
-
-      setSessions(formattedSessions);
-    } catch (error) {
-      console.error("Erro ao carregar sessões:", error);
-    }
-  };
-
-  const handleClockToggle = async () => {
-    if (isClockRunning) {
-      const now = new Date();
-      const sessionData = {
-        codeName: user!.code_name,
-        startTime: startTime!.toISOString(),
-        endTime: now.toISOString(),
-      };
-
-      try {
-        const newSession = await sessionService.saveSession(sessionData);
-        setSessions((prev) => [
-          {
-            ...newSession,
-            duration: sessionService.calculateDuration(
-              startTime!,
-              newSession.end_time ? new Date(newSession.end_time) : new Date()
-            ),
-          },
-          ...prev,
-        ]);
-      } catch (error) {
-        console.error("Erro ao salvar sessão:", error);
-      } finally {
-        setIsClockRunning(false);
-        setStartTime(null);
-        TimerStorage.clearStartTime();
-        setCurrentTime("0h 00m");
-      }
-    } else {
-      const now = new Date();
-      setStartTime(now);
-      setIsClockRunning(true);
-      TimerStorage.saveStartTime(now);
-    }
-  };
-
-  const restoreTimerState = () => {
-    const savedStartTime = TimerStorage.getStartTime();
-    if (savedStartTime) {
-      setStartTime(savedStartTime);
-      setIsClockRunning(true);
-    }
-  };
-
-  const navigateHome = () => router.push("/");
 
   if (!user) {
     return (
-      <div className="flex w-[365px] m-auto flex-col items-center justify-center h-screen">
+      <div className="flex flex-col items-center justify-center h-screen">
         <p className="text-red-500 text-lg mb-4">Usuário não encontrado.</p>
         <ButtonComponent
           text="Retornar à Home"
-          onClick={navigateHome}
+          onClick={() => router.push("/")}
           className="w-full bg-orange-500 hover:bg-orange-600 text-black"
         />
       </div>
     );
   }
 
+  const { isClockRunning, currentTime, totalDuration, sessions, toggleClock } =
+    useTimer(user.code_name);
+
   return (
     <div className="flex flex-col w-[365px] items-center justify-between pt-20 m-auto">
       <header className="flex justify-between mb-6 w-full items-center">
         <ButtonComponent
-          onClick={navigateHome}
+          onClick={() => router.push("/")}
           text={<ArrowCircleLeft size={32} />}
-          className="bg-transparent text-orange-400 hover:bg-transparent hover:text-orange-600 "
+          className="bg-transparent text-orange-400 hover:bg-transparent hover:text-orange-600"
         />
         <h1 className="text-sm font-semibold">Relógio de ponto</h1>
         <div className="flex flex-col items-center text-xs">
           <p className="font-bold">#{user.code_name}</p>
-          <p className="font-light">{user.name}</p>
+          <p>{user.name}</p>
         </div>
       </header>
       <div className="flex flex-col items-start w-full pb-4">
@@ -175,7 +61,7 @@ export default function UserPage({ user }: UserPageProps) {
         </div>
         <ButtonComponent
           text={isClockRunning ? "Hora de saída" : "Hora de entrada"}
-          onClick={handleClockToggle}
+          onClick={toggleClock}
           className="w-full bg-orange-500 hover:bg-orange-600 text-black"
         />
       </div>
@@ -207,26 +93,15 @@ export const getServerSideProps: GetServerSideProps<UserPageProps> = async (
   context
 ) => {
   const { code } = context.params!;
-
   try {
     const user = await prisma.user.findUnique({
       where: { code_name: String(code) },
     });
-
-    if (!user) {
-      return { props: { user: null } };
-    }
-
+    if (!user) return { props: { user: null } };
     return {
-      props: {
-        user: {
-          ...user,
-          createdAt: user.createdAt.toISOString(),
-        },
-      },
+      props: { user: { ...user, createdAt: user.createdAt.toISOString() } },
     };
   } catch (error) {
-    console.error(`Erro ao buscar usuário com code_name ${code}:`, error);
     return { props: { user: null } };
   }
 };
