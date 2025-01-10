@@ -1,175 +1,142 @@
-# **Controle de Ponto - Ilumeo**
+# Controle de Ponto - Ilumeo
 
-Uma aplicação para controle de ponto, permitindo que colaboradores iniciem/encerrem turnos, acompanhem as horas trabalhadas no dia atual e visualizem o histórico de registros.
+Aplicação para controle de ponto dos colaboradores, permitindo visualizar as horas trabalhadas, iniciar e finalizar turnos, além de acompanhar o total de horas dos dias anteriores.
 
-## **Sumário**
+## Funcionalidades
 
-- [**Controle de Ponto - Ilumeo**](#controle-de-ponto---ilumeo)
-  - [**Sumário**](#sumário)
-  - [**Requisitos**](#requisitos)
-  - [**Configuração do Ambiente**](#configuração-do-ambiente)
-  - [**Executando a Aplicação**](#executando-a-aplicação)
-  - [**Executando os Testes**](#executando-os-testes)
-    - [**Testes Unitários**](#testes-unitários)
-    - [**Testes E2E**](#testes-e2e)
-  - [**Tecnologias Utilizadas**](#tecnologias-utilizadas)
-  - [**Contribuição**](#contribuição)
-  - [**Licença**](#licença)
+- **Visualização em tempo real** das horas trabalhadas no dia atual.
+- **Início e término de turnos** de trabalho.
+- **Histórico de horas trabalhadas** nos dias anteriores.
+- **Cadastro de usuários** (apenas para administradores).
+- **Carregamento com skeletons** para uma experiência fluida.
+- **SEO otimizado** utilizando `next-seo`.
+- **Responsividade** para dispositivos móveis e desktops.
 
 ---
 
-## **Requisitos**
+## Tecnologias Utilizadas
 
-Antes de começar, certifique-se de que você tem as seguintes ferramentas instaladas:
+### Frontend
 
-- [Node.js](https://nodejs.org/) >= 18.x
-- [Docker](https://www.docker.com/)
-- [PostgreSQL](https://www.postgresql.org/) (se não for usar Docker)
-- [Yarn](https://yarnpkg.com/) (opcional, mas recomendado)
+- **Next.js** (Framework React)
+- **Tailwind CSS** (Estilização)
+- **React Hook Form + Zod** (Validação de formulários)
+- **React Toastify** (Mensagens de notificação)
+
+### Backend
+
+- **Next.js API Routes** (Endpoints)
+- **Prisma** (ORM para banco de dados)
+- **PostgreSQL** (Banco de dados)
+
+### Ferramentas e Configurações
+
+- **Docker** (Ambiente de desenvolvimento e produção)
+- **ESLint e Prettier** (Qualidade e formatação de código)
+- **Cypress** (Testes E2E)
 
 ---
 
-## **Configuração do Ambiente**
+## Configuração e Instalação
 
-1. Clone este repositório:
+### Pré-requisitos
 
-   ```bash
-   git clone https://github.com/seu-usuario/controle-de-ponto.git
-   cd controle-de-ponto
-   ```
+- **Node.js** (v16 ou superior)
+- **Docker** (opcional para rodar o banco de dados)
 
-2. Crie um arquivo `.env` na raiz do projeto, baseado no `.env.example`:
+### Passos para rodar localmente
 
-   ```bash
-   cp .env.example .env
-   ```
-
-   Atualize as variáveis no arquivo `.env` com os detalhes do seu banco de dados e outros parâmetros.
-
-3. Suba o banco de dados com Docker:
+1. Clone o repositório:
 
    ```bash
-   docker-compose up -d
+   git clone https://github.com/seu-usuario/controle-de-ponto-ilumeo.git
+   cd controle-de-ponto-ilumeo
    ```
 
-   **Nota:** O arquivo `docker-compose.yml` já configura o PostgreSQL para a aplicação.
-
-4. Instale as dependências:
+2. Instale as dependências:
 
    ```bash
    npm install
    ```
 
-5. Configure o banco de dados usando o Prisma:
+3. Configure as variáveis de ambiente:
+   Crie um arquivo `.env.local` com os seguintes valores:
 
-   ```bash
-   npx prisma migrate dev
+   ```.env
+   DATABASE_URL=postgresql://user:password@localhost:5432/dbname
+   NEXT_PUBLIC_ADMIN_PASSWORD=senha123
    ```
 
-   Isso criará as tabelas necessárias no banco de dados.
-
-6. (Opcional) Preencha o banco com dados iniciais:
-
-   ```bash
-   npx prisma db seed
-   ```
-
----
-
-## **Executando a Aplicação**
-
-1. Inicie o servidor local:
+4. Inicie o servidor de desenvolvimento:
 
    ```bash
    npm run dev
    ```
 
-2. Abra o navegador e acesse:
-
-   ```
-   http://localhost:3000
-   ```
+5. Acesse a aplicação em: [http://localhost:3000](http://localhost:3000)
 
 ---
 
-## **Executando os Testes**
+## Funcionalidades Detalhadas
 
-### **Testes Unitários**
+### 1. Cadastro de Usuários
 
-1. Execute os testes unitários com o Jest:
+- A funcionalidade de cadastro é restrita para administradores.
+- Para acessar, você precisará inserir a senha de administrador.
+- **Senha padrão:** `senha123`.
 
-   ```bash
-   npm run test
-   ```
+### 2. Início e Finalização de Turnos
 
-2. Para executar os testes em modo interativo:
+- O botão "Hora de entrada" inicia o relógio.
+- O botão "Hora de saída" finaliza o turno e salva as informações no banco.
 
-   ```bash
-   npm run test:watch
-   ```
+### 3. Histórico de Turnos
 
-3. Para exibir a cobertura dos testes:
+- A seção "Dias anteriores" exibe uma lista de turnos anteriores, com data e duração.
 
-   ```bash
-   npm run test:coverage
-   ```
+### 4. Skeletons para Carregamento
 
----
-
-### **Testes E2E**
-
-1. Inicie a aplicação em um ambiente de teste:
-
-   ```bash
-   npm run dev
-   ```
-
-2. Abra o Cypress para executar os testes E2E:
-
-   ```bash
-   npm run test:e2e
-   ```
-
-3. Para rodar os testes E2E no terminal:
-
-   ```bash
-   npm run test:e2e:run
-   ```
+- Enquanto os dados estão sendo buscados, skeletons são exibidos para melhorar a experiência do usuário.
 
 ---
 
-## **Tecnologias Utilizadas**
+## Testes
 
-- **Front-end**:
-  - Next.js
-  - React
-  - TypeScript
-  - TailwindCSS
+### Executar Testes E2E (Cypress)
 
-- **Back-end**:
-  - Node.js
-  - Prisma ORM
-  - PostgreSQL
+Certifique-se de que o servidor está rodando, então execute:
 
-- **Testes**:
-  - Jest (Unitários)
-  - Cypress (E2E)
-
-- **Ferramentas Auxiliares**:
-  - ESLint
-  - Prettier
-  - Docker
+```bash
+npm run cypress
+```
 
 ---
 
-## **Contribuição**
+## Deploy
 
-Sinta-se à vontade para abrir issues e enviar pull requests. Toda contribuição é bem-vinda!
+### Deploy Frontend
+
+- **Plataforma:** Vercel
+- [Link da Aplicação](https://sua-aplicacao.vercel.app)
+
+### Deploy Backend
+
+- **Plataforma:** Render
+- Banco de dados PostgreSQL configurado no Render.
 
 ---
 
-## **Licença**
+## Contribuição
 
-Este projeto está licenciado sob a [MIT License](LICENSE).
+Contribuições são bem-vindas! Para contribuir:
+
+1. Faça um fork do projeto.
+2. Crie uma branch para sua feature: `git checkout -b minha-feature`.
+3. Commit suas mudanças: `git commit -m 'Minha nova feature'`.
+4. Envie para a branch principal: `git push origin minha-feature`.
 
 ---
+
+## Licença
+
+Este projeto está sob a licença MIT.
