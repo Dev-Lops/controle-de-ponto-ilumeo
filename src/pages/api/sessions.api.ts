@@ -60,6 +60,7 @@ async function handlePost(req: NextApiRequest, res: NextApiResponse) {
   const user = await prisma.user.findUnique({
     where: { code_name: codeName },
   });
+  await prisma.$disconnect(); // Fecha conexão
 
   if (!user) {
     return res.status(404).json({ message: "Usuário não encontrado" });

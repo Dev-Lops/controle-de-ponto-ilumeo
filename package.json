@@ -11,8 +11,7 @@
     "lint": "next lint",
     "seed": "ts-node --transpile-only prisma/seed.ts",
     "test:e2e": "cypress open",
-    "test:e2e:run": "cypress run",
-    "postinstall": "prisma generate"
+    "test:e2e:run": "cypress run"
   },
   "prisma": {
     "seed": "ts-node --transpile-only prisma/seed.ts"
