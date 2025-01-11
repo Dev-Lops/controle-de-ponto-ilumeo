@@ -1,6 +1,4 @@
-import React from "react";
-
-export const LoadingScreen: React.FC = () => {
+export const LoadingScreen = () => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 flex-col gap-5">
       <div className="loader">
