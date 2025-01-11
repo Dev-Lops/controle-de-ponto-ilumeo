@@ -4,7 +4,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { UserService } from "@/services/userServices";
 import { useRouter } from "next/router";
-import { ButtonComponent } from "@/components/button";
+import { ButtonComponent } from "@/components/Button";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { userSchema } from "@/validations/userValidations";
@@ -48,7 +48,7 @@ export default function RegisterUser() {
       reset();
       setTimeout(() => {
         router.push("/");
-      }, 3000);
+      }, 2000);
     } catch (error: any) {
       toast.error(error.message || "Erro inesperado.");
     } finally {
@@ -77,8 +77,9 @@ export default function RegisterUser() {
               <input
                 type="text"
                 id="name"
+                placeholder="John Doe"
                 {...register("name")}
-                className={`mt-1 block w-full bg-transparent border-orange-400 px-3 py-2 border ${
+                className={`mt-1 block w-full bg-transparent border-orange-400 px-3 py-2 border focus:ring-0 focus:border-orange-700  ${
                   errors.name ? "border-red-500" : "border-gray-300"
                 } rounded-md shadow-sm`}
               />
@@ -100,9 +101,9 @@ export default function RegisterUser() {
                 id="code_name"
                 {...register("code_name")}
                 onChange={handleCodeNameChange}
-                placeholder="Digite o código"
+                placeholder="ex: ABCD1234"
                 maxLength={8} // Limita o campo a 8 caracteres
-                className={`mt-1 block  bg-transparent w-full border-orange-400 px-3 py-2 border ${
+                className={`mt-1 block bg-transparent w-full border-orange-400 px-3 py-2 border focus:ring-0 focus:border-orange-700  ${
                   errors.code_name ? "border-red-500" : "border-gray-300"
                 } rounded-md shadow-sm`}
               />
@@ -115,6 +116,7 @@ export default function RegisterUser() {
 
             {/* Botão de Cadastro */}
             <ButtonComponent
+              loading={loading} // Passa o estado de carregamento
               text="Cadastrar"
               type="submit"
               disabled={loading}

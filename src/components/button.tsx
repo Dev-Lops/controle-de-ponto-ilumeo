@@ -24,9 +24,9 @@ export const ButtonComponent: React.FC<ButtonProps> = ({
       type={type}
       disabled={disabled || loading} // Desabilita o botão durante o carregamento
       onClick={onClick}
-      className={`flex items-center justify-center px-4 py-4 rounded font-bold transition text-xl ${
+      className={`flex items-center justify-center px-2 py-2 rounded font-bold transition text-xl ${
         disabled || loading
-          ? "bg-gray-300 cursor-not-allowed"
+          ? "bg-transparent cursor-not-allowed text-gray-600"
           : "bg-orange-500 hover:bg-orange-600 text-black"
       } ${className}`}
     >

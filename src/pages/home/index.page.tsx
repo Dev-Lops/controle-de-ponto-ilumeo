@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/router";
-import { ButtonComponent } from "@/components/button";
+import { ButtonComponent } from "@/components/Button";
 import { userCodeSchema } from "@/validations/userValidations";
 import { NextSeo } from "next-seo";
 import { FiPlus } from "react-icons/fi";
@@ -78,7 +78,7 @@ export default function Home() {
             <ButtonComponent
               onClick={handleNewUser}
               text={<FiPlus size={32} />}
-              className="bg-transparent text-orange-400 hover:bg-transparent hover:text-orange-600"
+              className="bg-transparent text-orange-400 hover:bg-transparent hover:rotate-90"
             />
           </div>
 
@@ -120,11 +120,11 @@ export default function Home() {
 
             {/* Botão de envio */}
             <ButtonComponent
-              text={loading ? null : "Confirmar"}
+              text={loading ? null : "Acessar"}
               type="submit"
               disabled={loading}
               loading={loading} // Estado de loading
-              className="mt-4"
+              className="mt-4 bg-orange-500"
             />
           </form>
         </div>
