@@ -6,7 +6,7 @@ import { ButtonComponent } from "@/components/button";
 import { useTimer } from "@/hooks/userTime";
 import { NextSeo } from "next-seo";
 import { Skeleton } from "@/components/skeleton";
-import { UserChart } from "@/components/userCharts";
+import { UserChart } from "@/components/usersCharts";
 import { SessionsByDay } from "@/components/sessionsByDays";
 import { FiArrowLeftCircle } from "react-icons/fi";
 
