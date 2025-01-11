@@ -2,10 +2,11 @@ import { GetServerSideProps } from "next";
 import { prisma } from "@/lib/prisma";
 import { useRouter } from "next/router";
 import { ButtonComponent } from "@/components/button";
-import { ArrowCircleLeft } from "@phosphor-icons/react";
 import { useTimer } from "@/hooks/userTime";
 import { NextSeo } from "next-seo";
-import { Skeleton } from "@/components/skeleton"; // Componente Skeleton para fallback de carregamento
+import { Skeleton } from "@/components/skeleton";
+
+import { FiArrowLeftCircle } from "react-icons/fi"; // Componente Skeleton para fallback de carregamento
 
 interface UserPageProps {
   user: {
@@ -49,7 +50,7 @@ export default function UserPage({ user }: UserPageProps) {
         <header className="flex justify-between mb-6 w-full items-center">
           <ButtonComponent
             onClick={() => router.push("/")}
-            text={<ArrowCircleLeft size={32} />}
+            text={<FiArrowLeftCircle size={32} />}
             className="bg-transparent text-orange-400 hover:bg-transparent hover:text-orange-600"
           />
           <h1 className="text-sm font-semibold">Relógio de ponto</h1>

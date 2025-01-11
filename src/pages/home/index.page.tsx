@@ -6,7 +6,7 @@ import { useRouter } from "next/router";
 import { ButtonComponent } from "@/components/button";
 import { userCodeSchema } from "@/validations/userValidations";
 import { NextSeo } from "next-seo";
-import { Plus } from "@phosphor-icons/react";
+import { FiPlus } from "react-icons/fi";
 
 // Define a tipagem do formulário com base no schema do Zod
 type FormData = z.infer<typeof userCodeSchema>;
@@ -76,7 +76,7 @@ export default function Home() {
 
             <ButtonComponent
               onClick={handleNewUser}
-              text={<Plus size={32} />}
+              text={<FiPlus size={32} />}
               className="bg-transparent text-orange-400 hover:bg-transparent hover:text-orange-600"
             />
           </div>
