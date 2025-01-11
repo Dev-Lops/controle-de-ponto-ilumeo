@@ -77,7 +77,7 @@ body {
   .inner {
     border: 3px solid transparent;
     border-top-color: #e67900;
-    border-right-color: #000;
+    border-right-color: transparent;
     border-radius: 50%;
     position: absolute;
     top: 50%;

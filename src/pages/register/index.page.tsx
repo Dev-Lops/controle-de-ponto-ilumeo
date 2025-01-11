@@ -78,7 +78,7 @@ export default function RegisterUser() {
                 type="text"
                 id="name"
                 {...register("name")}
-                className={`mt-1 block w-full bg-transparent px-3 py-2 border ${
+                className={`mt-1 block w-full bg-transparent border-orange-400 px-3 py-2 border ${
                   errors.name ? "border-red-500" : "border-gray-300"
                 } rounded-md shadow-sm`}
               />
@@ -102,7 +102,7 @@ export default function RegisterUser() {
                 onChange={handleCodeNameChange}
                 placeholder="Digite o código"
                 maxLength={8} // Limita o campo a 8 caracteres
-                className={`mt-1 block  bg-transparent w-full px-3 py-2 border ${
+                className={`mt-1 block  bg-transparent w-full border-orange-400 px-3 py-2 border ${
                   errors.code_name ? "border-red-500" : "border-gray-300"
                 } rounded-md shadow-sm`}
               />

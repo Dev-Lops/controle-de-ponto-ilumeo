@@ -9,7 +9,7 @@ export const userCodeSchema = z.object({
       message: "O código do usuário deve ter exatamente 8 caracteres",
     })
     .regex(/^[A-Z0-9]+$/, {
-      message: "O código deve conter apenas letras maiúsculas e números",
+      message: "O código deve conter apenas letras e números",
     }),
 });
 
@@ -21,6 +21,6 @@ export const userSchema = z.object({
     .length(8, "O código deve ter exatamente 8 caracteres.")
     .regex(
       /^[A-Z0-9]+$/,
-      "O código deve conter apenas letras maiúsculas e números."
+      "O código deve conter apenas letras e números."
     ),
 });

@@ -18,6 +18,7 @@ export function useTimer(userCode: string) {
 
   useEffect(() => {
     let interval: NodeJS.Timeout | undefined;
+
     if (isClockRunning && startTime) {
       interval = setInterval(() => {
         const now = new Date();
@@ -33,6 +34,7 @@ export function useTimer(userCode: string) {
     } else {
       setTotalDuration(sessionService.calculateTotalDuration(sessions, 0));
     }
+
     return () => clearInterval(interval);
   }, [isClockRunning, startTime, sessions]);
 
@@ -93,14 +95,14 @@ export function useTimer(userCode: string) {
       } finally {
         setIsClockRunning(false);
         setStartTime(null);
-        TimerStorage.clearStartTime(userCode);
+        await TimerStorage.clearStartTime(userCode);
         setCurrentTime("0h 00m");
       }
     } else {
       const now = new Date();
       setStartTime(now);
       setIsClockRunning(true);
-      TimerStorage.saveStartTime(userCode, now);
+      await TimerStorage.saveStartTime(userCode, now);
     }
   };
 
