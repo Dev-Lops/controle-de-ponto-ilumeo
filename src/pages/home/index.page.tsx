@@ -26,9 +26,10 @@ export default function Home() {
     mode: "onChange", // Validação em tempo real
   });
 
-  // Atualizar o valor do input para letras maiúsculas
+  // Atualizar o valor do input para letras maiúsculas e limitar a 8 caracteres
   const handleCodeUserChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValue("codeUser", e.target.value.toUpperCase());
+    const value = e.target.value.toUpperCase().slice(0, 8); // Garante maiúsculas e no máximo 8 caracteres
+    setValue("codeUser", value, { shouldValidate: true });
   };
 
   // Lidar com o envio do formulário
@@ -55,10 +56,10 @@ export default function Home() {
           title: "Home - Controle de Ponto",
           description:
             "Gerencie suas horas de trabalho com a aplicação Controle de Ponto Ilumeo.",
-          url: "https://www.seusite.com/",
+          url: "https://controle-de-ponto-ilumeo.vercel.app",
           images: [
             {
-              url: "https://www.seusite.com/favicon.svg",
+              url: "https://controle-de-ponto-ilumeo.vercel.app/favicon.svg",
               width: 500,
               height: 500,
               alt: "Página Inicial do Controle de Ponto",
@@ -98,6 +99,7 @@ export default function Home() {
                 onChange={handleCodeUserChange}
                 placeholder="Digite o código"
                 required
+                maxLength={8} // Limita o input a 8 caracteres
                 aria-label="Código do usuário"
                 aria-describedby="codeUserHelp"
                 className={`w-full text-xl border-none bg-transparent rounded outline-none focus:outline-none transition-all duration-200 ${

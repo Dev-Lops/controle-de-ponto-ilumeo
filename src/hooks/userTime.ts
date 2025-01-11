@@ -57,14 +57,17 @@ export function useTimer(userCode: string) {
     }
   };
 
-  const restoreTimerState = (codeName: string) => {
-    const savedStartTime = TimerStorage.getStartTime(codeName);
-    if (savedStartTime) {
-      setStartTime(savedStartTime);
-      setIsClockRunning(true);
+  async function restoreTimerState(userCode: string) {
+    try {
+      const savedStartTime = await TimerStorage.getStartTime(userCode);
+      if (savedStartTime) {
+        setStartTime(savedStartTime);
+        setIsClockRunning(true);
+      }
+    } catch (error) {
+      console.error("Erro ao restaurar o estado do timer:", error);
     }
-    setLoading(false); // Finaliza o carregamento após verificar o estado
-  };
+  }
 
   const toggleClock = async () => {
     if (isClockRunning) {

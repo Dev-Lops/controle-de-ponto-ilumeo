@@ -23,9 +23,16 @@ export default function RegisterUser() {
     handleSubmit,
     formState: { errors },
     reset,
+    setValue,
   } = useForm<UserFormData>({
     resolver: zodResolver(userSchema),
   });
+
+  // Função para forçar letras maiúsculas e limitar a 8 caracteres
+  const handleCodeNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.toUpperCase().slice(0, 8);
+    setValue("code_name", value, { shouldValidate: true });
+  };
 
   const onSubmit = async (data: UserFormData) => {
     setLoading(true);
@@ -59,6 +66,7 @@ export default function RegisterUser() {
             Cadastrar Usuário
           </h1>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            {/* Campo Nome */}
             <div>
               <label
                 htmlFor="name"
@@ -79,6 +87,7 @@ export default function RegisterUser() {
               )}
             </div>
 
+            {/* Campo Código */}
             <div>
               <label
                 htmlFor="code_name"
@@ -90,6 +99,9 @@ export default function RegisterUser() {
                 type="text"
                 id="code_name"
                 {...register("code_name")}
+                onChange={handleCodeNameChange}
+                placeholder="Digite o código"
+                maxLength={8} // Limita o campo a 8 caracteres
                 className={`mt-1 block  bg-transparent w-full px-3 py-2 border ${
                   errors.code_name ? "border-red-500" : "border-gray-300"
                 } rounded-md shadow-sm`}
@@ -101,6 +113,7 @@ export default function RegisterUser() {
               )}
             </div>
 
+            {/* Botão de Cadastro */}
             <ButtonComponent
               text="Cadastrar"
               type="submit"

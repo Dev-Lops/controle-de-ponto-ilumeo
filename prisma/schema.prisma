@@ -23,3 +23,8 @@ model WorkSession {
   user_id    String
   user       User      @relation(fields: [user_id], references: [id])
 }
+model Timer {
+  user_code String   @unique
+  start_time DateTime
+}
+
