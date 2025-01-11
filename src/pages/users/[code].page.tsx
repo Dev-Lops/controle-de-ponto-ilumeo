@@ -7,7 +7,7 @@ import { useTimer } from "@/hooks/userTime";
 import { NextSeo } from "next-seo";
 import { Skeleton } from "@/components/skeleton";
 import { UserChart } from "@/components/userCharts";
-import { SessionsByDay } from "@/components/sessionsByDay";
+import { SessionsByDay } from "@/components/sessionsByDays";
 import { FiArrowLeftCircle } from "react-icons/fi";
 
 interface UserPageProps {

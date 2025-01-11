@@ -1,5 +1,5 @@
 import React from "react";
-import { SessionsByDay } from "@/components/sessionsByDay";
+import { SessionsByDay } from "@/components/sessionsByDays";
 import { UserChart } from "@/components/userCharts";
 import { Session } from "@/services/sessionService";
 
