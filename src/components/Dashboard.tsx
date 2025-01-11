@@ -1,6 +1,6 @@
 import React from "react";
-import { SessionsByDay } from "@/components/SessionsByDay";
-import { UserChart } from "@/components/UserCharts";
+import { SessionsByDay } from "@/components/sessionsByDay";
+import { UserChart } from "@/components/userCharts";
 import { Session } from "@/services/sessionService";
 
 interface DashboardProps {

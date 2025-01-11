@@ -4,7 +4,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { UserService } from "@/services/userServices";
 import { useRouter } from "next/router";
-import { ButtonComponent } from "@/components/Button";
+import { ButtonComponent } from "@/components/button";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { userSchema } from "@/validations/userValidations";

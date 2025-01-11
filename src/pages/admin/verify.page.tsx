@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
-import { ButtonComponent } from "@/components/Button";
+import { ButtonComponent } from "@/components/button";
 import { NextSeo } from "next-seo";
 
 export default function VerifyAdmin() {

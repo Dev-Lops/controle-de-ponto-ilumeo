@@ -2,12 +2,12 @@ import React from "react";
 import { GetServerSideProps } from "next";
 import { prisma } from "@/lib/prisma";
 import { useRouter } from "next/router";
-import { ButtonComponent } from "@/components/Button";
+import { ButtonComponent } from "@/components/button";
 import { useTimer } from "@/hooks/userTime";
 import { NextSeo } from "next-seo";
-import { Skeleton } from "@/components/Skeleton";
-import { UserChart } from "@/components/UserCharts";
-import { SessionsByDay } from "@/components/SessionsByDay";
+import { Skeleton } from "@/components/skeleton";
+import { UserChart } from "@/components/userCharts";
+import { SessionsByDay } from "@/components/sessionsByDay";
 import { FiArrowLeftCircle } from "react-icons/fi";
 
 interface UserPageProps {

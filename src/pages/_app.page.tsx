@@ -4,9 +4,7 @@ import type { AppProps } from "next/app";
 import SEO from "../../next-seo.config";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import LoadingScreen from "@/components/LoadingScreen";
-
-
+import { LoadingScreen } from "@/components/loadingScreen";
 
 export default function App({ Component, pageProps }: AppProps) {
   const [isLoading, setIsLoading] = useState(false);
