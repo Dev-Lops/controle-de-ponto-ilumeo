@@ -47,7 +47,7 @@ export function useTimer(userCode: string) {
 
         return {
           ...session,
-          duration: sessionService.calculateDuration(start, end),
+          duration: calculatePreciseDuration(start, end),
         };
       });
 
@@ -85,7 +85,7 @@ export function useTimer(userCode: string) {
         setSessions((prev) => [
           {
             ...newSession,
-            duration: sessionService.calculateDuration(
+            duration: calculatePreciseDuration(
               startTime!,
               new Date(newSession.end_time || Date.now())
             ),
@@ -105,6 +105,14 @@ export function useTimer(userCode: string) {
       await TimerStorage.saveStartTime(userCode, now);
     }
   };
+
+  // Função para calcular a duração precisa
+  function calculatePreciseDuration(start: Date, end: Date): string {
+    const diffMs = end.getTime() - start.getTime();
+    const hours = Math.floor(diffMs / (1000 * 60 * 60));
+    const minutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+    return `${hours}h ${minutes}m`;
+  }
 
   return {
     isClockRunning,
