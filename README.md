@@ -64,7 +64,7 @@ Aplicação para controle de ponto dos colaboradores, permitindo visualizar as h
 
    ```.env
    DATABASE_URL=postgresql://user:password@localhost:5432/dbname
-   NEXT_PUBLIC_ADMIN_PASSWORD=senha123
+   NEXT_PUBLIC_ADMIN_PASSWORD=minhasenha123
    ```
 
 4. Inicie o servidor de desenvolvimento:
