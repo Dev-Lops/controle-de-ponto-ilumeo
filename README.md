@@ -83,7 +83,7 @@ Aplicação para controle de ponto dos colaboradores, permitindo visualizar as h
 
 - A funcionalidade de cadastro é restrita para administradores.
 - Para acessar, você precisará inserir a senha de administrador.
-- **Senha padrão:** `senha123`.
+- **Senha padrão:** `minhasenha123`.
 
 ### 2. Início e Finalização de Turnos
 
