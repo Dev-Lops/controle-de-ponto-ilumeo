@@ -54,7 +54,7 @@ export default function RegisterUser() {
       <NextSeo title="Cadastrar Usuário" />
       <div className="flex flex-col items-center justify-center h-screen px-4">
         <ToastContainer position="bottom-right" autoClose={3000} />
-        <div className="max-w-md w-full bg-gray-100 shadow-md rounded px-8 py-6">
+        <div className="max-w-md w-full bg-input shadow-md rounded px-8 py-6">
           <h1 className="text-2xl font-bold text-center mb-6 text-orange-500">
             Cadastrar Usuário
           </h1>
