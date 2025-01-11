@@ -13,15 +13,17 @@ export default async function handler(
   try {
     switch (req.method) {
       case "GET":
-        return handleGet(req, res);
+        await handleGet(req, res);
+        break;
       case "POST":
-        return handlePost(req, res);
+        await handlePost(req, res);
+        break;
       default:
-        return res.status(405).json({ message: "Método não permitido" });
+        res.status(405).json({ message: "Método não permitido" });
     }
   } catch (error) {
     console.error("Erro na API de sessões:", error);
-    return res.status(500).json({ message: "Erro interno no servidor" });
+    res.status(500).json({ message: "Erro interno no servidor" });
   }
 }
 
@@ -35,8 +37,14 @@ async function handleGet(req: NextApiRequest, res: NextApiResponse) {
     return res.status(400).json({ message: "Code Name é obrigatório" });
   }
 
-  const pageNumber = parseInt(page as string, 10);
-  const pageSize = parseInt(limit as string, 10);
+  const pageNumber = parseInt(page as string, 10) || 1;
+  const pageSize = parseInt(limit as string, 10) || 10;
+
+  if (pageNumber < 1 || pageSize < 1) {
+    return res
+      .status(400)
+      .json({ message: "Parâmetros de paginação inválidos." });
+  }
 
   try {
     const user = await prisma.user.findUnique({
@@ -49,16 +57,15 @@ async function handleGet(req: NextApiRequest, res: NextApiResponse) {
         .json({ message: `Usuário com code_name ${codeName} não encontrado.` });
     }
 
-    const sessions = await prisma.workSession.findMany({
-      where: { user_id: user.id },
-      skip: (pageNumber - 1) * pageSize,
-      take: pageSize,
-      orderBy: { start_time: "desc" },
-    });
-
-    const totalSessions = await prisma.workSession.count({
-      where: { user_id: user.id },
-    });
+    const [sessions, totalSessions] = await Promise.all([
+      prisma.workSession.findMany({
+        where: { user_id: user.id },
+        skip: (pageNumber - 1) * pageSize,
+        take: pageSize,
+        orderBy: { start_time: "desc" },
+      }),
+      prisma.workSession.count({ where: { user_id: user.id } }),
+    ]);
 
     return res.status(200).json({
       sessions,
@@ -68,9 +75,7 @@ async function handleGet(req: NextApiRequest, res: NextApiResponse) {
     });
   } catch (error) {
     console.error("Erro ao buscar sessões:", error);
-    return res.status(500).json({ message: "Erro interno no servidor" });
-  } finally {
-    await prisma.$disconnect();
+    res.status(500).json({ message: "Erro interno ao buscar sessões" });
   }
 }
 
@@ -101,10 +106,8 @@ async function handlePost(req: NextApiRequest, res: NextApiResponse) {
   } catch (error) {
     console.error("Erro ao criar sessão:", error);
     if (error instanceof z.ZodError) {
-      return res.status(400).json({ message: error.errors });
+      return res.status(400).json({ errors: error.errors });
     }
-    return res.status(500).json({ message: "Erro interno no servidor" });
-  } finally {
-    await prisma.$disconnect();
+    res.status(500).json({ message: "Erro interno ao criar sessão" });
   }
 }
