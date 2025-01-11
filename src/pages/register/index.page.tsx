@@ -54,7 +54,7 @@ export default function RegisterUser() {
       <NextSeo title="Cadastrar Usuário" />
       <div className="flex flex-col items-center justify-center h-screen px-4">
         <ToastContainer position="bottom-right" autoClose={3000} />
-        <div className="max-w-md w-full bg-gray-100 shadow-md rounded px-8 py-6">
+        <div className="max-w-md w-full bg-input shadow-md rounded px-8 py-6">
           <h1 className="text-2xl font-bold text-center mb-6 text-orange-500">
             Cadastrar Usuário
           </h1>
@@ -70,7 +70,7 @@ export default function RegisterUser() {
                 type="text"
                 id="name"
                 {...register("name")}
-                className={`mt-1 block w-full px-3 py-2 border ${
+                className={`mt-1 block w-full bg-transparent px-3 py-2 border ${
                   errors.name ? "border-red-500" : "border-gray-300"
                 } rounded-md shadow-sm`}
               />
@@ -90,7 +90,7 @@ export default function RegisterUser() {
                 type="text"
                 id="code_name"
                 {...register("code_name")}
-                className={`mt-1 block w-full px-3 py-2 border ${
+                className={`mt-1 block  bg-transparent w-full px-3 py-2 border ${
                   errors.code_name ? "border-red-500" : "border-gray-300"
                 } rounded-md shadow-sm`}
               />
