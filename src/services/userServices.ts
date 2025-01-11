@@ -6,31 +6,26 @@ export interface CreateUserInput {
 }
 
 export class UserService {
-  // Busca um usuário pelo codeName
-  async fetchUser(codeName: string) {
-    if (!codeName) throw new Error("O código do usuário é obrigatório.");
+  async createUser(data: CreateUserInput) {
     try {
-      const response = await api.get(`/users/${codeName}`);
+      const response = await api.post("/users", data);
       return response.data;
-    } catch (error) {
-      console.error("Erro ao buscar usuário:", error);
-      throw new Error("Não foi possível buscar o usuário.");
+    } catch (error: any) {
+      if (error.response?.status === 409) {
+        throw new Error("Já existe um usuário com este código.");
+      }
+      throw new Error("Erro ao criar o usuário.");
     }
   }
 
-  // Cria um novo usuário
-  async createUser(data: CreateUserInput) {
-    const { name, code_name } = data;
-    if (!name || !code_name) {
-      throw new Error("Nome e código do usuário são obrigatórios.");
-    }
-
+  async checkUserExists(code_name: string): Promise<boolean> {
     try {
-      const response = await api.post("/users", { name, code_name });
-      return response.data;
+      const response = await api.get("/users", {
+        params: { code_name },
+      });
+      return response.data.exists;
     } catch (error) {
-      console.error("Erro ao criar usuário:", error);
-      throw new Error("Não foi possível criar o usuário.");
+      throw new Error("Erro ao verificar usuário.");
     }
   }
 }

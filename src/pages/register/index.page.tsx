@@ -7,7 +7,6 @@ import { useRouter } from "next/router";
 import { ButtonComponent } from "@/components/button";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import axios from "axios";
 import { userSchema } from "@/validations/userValidations";
 import { NextSeo } from "next-seo";
 
@@ -31,26 +30,20 @@ export default function RegisterUser() {
   const onSubmit = async (data: UserFormData) => {
     setLoading(true);
     try {
+      const exists = await userService.checkUserExists(data.code_name);
+      if (exists) {
+        toast.error("Já existe um usuário com este código.");
+        return;
+      }
+
       await userService.createUser(data);
-      toast.success("Usuário cadastrado com sucesso!", { autoClose: 3000 });
+      toast.success("Usuário cadastrado com sucesso!");
       reset();
       setTimeout(() => {
         router.push("/");
       }, 3000);
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        toast.error(
-          error.response?.status === 409
-            ? "Já existe um usuário com este código."
-            : "Erro ao cadastrar usuário.",
-          { autoClose: 3000 }
-        );
-      } else {
-        console.error("Erro inesperado:", error);
-        toast.error("Erro inesperado ao cadastrar usuário.", {
-          autoClose: 3000,
-        });
-      }
+    } catch (error: any) {
+      toast.error(error.message || "Erro inesperado.");
     } finally {
       setLoading(false);
     }
@@ -58,11 +51,10 @@ export default function RegisterUser() {
 
   return (
     <>
-      <NextSeo title={`Cadastrar usuário`} />
-
+      <NextSeo title="Cadastrar Usuário" />
       <div className="flex flex-col items-center justify-center h-screen px-4">
         <ToastContainer position="bottom-right" autoClose={3000} />
-        <div className="max-w-md w-full bg-input shadow-md rounded px-8 py-6">
+        <div className="max-w-md w-full bg-gray-100 shadow-md rounded px-8 py-6">
           <h1 className="text-2xl font-bold text-center mb-6 text-orange-500">
             Cadastrar Usuário
           </h1>
@@ -78,9 +70,9 @@ export default function RegisterUser() {
                 type="text"
                 id="name"
                 {...register("name")}
-                className={`mt-1 block w-full px-3 py-2 border-gray-600 bg-transparent rounded-md shadow-sm focus:border-orange-500 focus:ring-0 ${
+                className={`mt-1 block w-full px-3 py-2 border ${
                   errors.name ? "border-red-500" : "border-gray-300"
-                }`}
+                } rounded-md shadow-sm`}
               />
               {errors.name && (
                 <p className="text-red-500 text-sm">{errors.name.message}</p>
@@ -96,12 +88,11 @@ export default function RegisterUser() {
               </label>
               <input
                 type="text"
-                placeholder="ABCD1234"
                 id="code_name"
                 {...register("code_name")}
-                className={`mt-1 block w-full px-3 py-2 border-gray-600 bg-transparent rounded-md shadow-sm focus:border-orange-500 focus:ring-0 ${
+                className={`mt-1 block w-full px-3 py-2 border ${
                   errors.code_name ? "border-red-500" : "border-gray-300"
-                }`}
+                } rounded-md shadow-sm`}
               />
               {errors.code_name && (
                 <p className="text-red-500 text-sm">
@@ -114,7 +105,7 @@ export default function RegisterUser() {
               text="Cadastrar"
               type="submit"
               disabled={loading}
-              className={`w-full py-2 px-4 text-white rounded-md ${loading ? <div className="spinner"></div> : "text"}`}
+              className="w-full py-2 px-4 text-white bg-orange-500 rounded-md"
             />
           </form>
         </div>
