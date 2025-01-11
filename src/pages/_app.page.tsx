@@ -4,7 +4,7 @@ import type { AppProps } from "next/app";
 import SEO from "../../next-seo.config";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import { LoadingScreen } from "@/components/LoadingScreen";
+import { LoadingScreen } from "../components/";
 
 
 export default function App({ Component, pageProps }: AppProps) {
