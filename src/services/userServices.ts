@@ -25,6 +25,7 @@ export class UserService {
       });
       return response.data.exists;
     } catch (error) {
+      console.log(error)
       throw new Error("Erro ao verificar usuário.");
     }
   }
