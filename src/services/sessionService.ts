@@ -25,14 +25,25 @@ const API_ENDPOINTS = {
 type Duration = ReturnType<typeof dayjs.duration>;
 
 export class SessionService {
-  async fetchSessions(codeName: string): Promise<Session[]> {
+  async fetchSessions(
+    codeName: string
+  ): Promise<{ sessions: Session[]; total: number }> {
     if (!codeName) throw new Error("CodeName não pode ser vazio.");
 
     try {
       const response = await api.get(API_ENDPOINTS.FETCH_SESSIONS, {
         params: { codeName },
       });
-      return response.data;
+
+      if (!response.data.sessions || !Array.isArray(response.data.sessions)) {
+        console.error("Resposta inesperada da API:", response.data);
+        throw new Error("Formato da resposta da API não é válido.");
+      }
+
+      return {
+        sessions: response.data.sessions,
+        total: response.data.total || 0, // Opcional, apenas se os metadados forem necessários
+      };
     } catch (error) {
       console.error("Erro ao buscar sessões:", error);
       throw new Error("Não foi possível buscar sessões.");
@@ -60,6 +71,7 @@ export class SessionService {
 
   calculateTotalDuration(sessions: Session[], currentElapsed: number): string {
     const totalMilliseconds = sessions.reduce((acc, session) => {
+      if (!session.start_time || !session.end_time) return acc;
       return (
         acc + this.calculateElapsedTime(session.start_time, session.end_time)
       );

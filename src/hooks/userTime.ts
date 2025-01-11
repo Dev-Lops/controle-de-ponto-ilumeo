@@ -38,8 +38,8 @@ export function useTimer(userCode: string) {
 
   const loadSessions = async () => {
     try {
-      const fetchedSessions = await sessionService.fetchSessions(userCode);
-      const formattedSessions = fetchedSessions.map((session) => {
+      const { sessions } = await sessionService.fetchSessions(userCode);
+      const formattedSessions = sessions.map((session) => {
         const start = new Date(session.start_time);
         const end = session.end_time ? new Date(session.end_time) : new Date();
 
