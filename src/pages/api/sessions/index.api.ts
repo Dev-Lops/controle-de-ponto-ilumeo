@@ -110,10 +110,6 @@ async function handlePost(req: NextApiRequest, res: NextApiResponse) {
       });
     }
 
-    const duration = end
-      ? Math.floor((end.getTime() - start.getTime()) / (1000 * 60))
-      : null;
-
     const session = await prisma.workSession.create({
       data: {
         user_id: user.id,
