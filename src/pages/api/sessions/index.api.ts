@@ -119,7 +119,6 @@ async function handlePost(req: NextApiRequest, res: NextApiResponse) {
         user_id: user.id,
         start_time: start,
         end_time: end,
-        duration,
       },
     });
 
