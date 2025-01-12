@@ -9,6 +9,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { userSchema } from "@/validations/userValidations";
 import { NextSeo } from "next-seo";
+import { FiArrowLeftCircle } from "react-icons/fi";
 
 type UserFormData = z.infer<typeof userSchema>;
 
@@ -62,6 +63,11 @@ export default function RegisterUser() {
       <div className="flex flex-col items-center justify-center h-screen px-4">
         <ToastContainer position="bottom-right" autoClose={3000} />
         <div className="max-w-md w-full bg-input shadow-md rounded px-8 py-6">
+          <ButtonComponent
+            onClick={() => router.push("/")}
+            text={<FiArrowLeftCircle size={32} />}
+            className="bg-transparent text-orange-400 hover:bg-transparent hover:text-orange-600"
+          />
           <h1 className="text-2xl font-bold text-center mb-6 text-orange-500">
             Cadastrar Usuário
           </h1>

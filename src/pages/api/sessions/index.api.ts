@@ -90,11 +90,36 @@ async function handlePost(req: NextApiRequest, res: NextApiResponse) {
       return res.status(404).json({ message: "Usuário não encontrado" });
     }
 
+    const start = new Date(startTime);
+    const end = endTime ? new Date(endTime) : null;
+
+    // Verificar se já existe uma sessão para o dia atual
+    const existingSession = await prisma.workSession.findFirst({
+      where: {
+        user_id: user.id,
+        start_time: {
+          gte: new Date(start.toISOString().split("T")[0] + "T00:00:00Z"),
+          lt: new Date(start.toISOString().split("T")[0] + "T23:59:59Z"),
+        },
+      },
+    });
+
+    if (existingSession) {
+      return res.status(400).json({
+        message: "Já existe uma sessão registrada para este dia.",
+      });
+    }
+
+    const duration = end
+      ? Math.floor((end.getTime() - start.getTime()) / (1000 * 60))
+      : null;
+
     const session = await prisma.workSession.create({
       data: {
         user_id: user.id,
-        start_time: new Date(startTime),
-        end_time: endTime ? new Date(endTime) : null,
+        start_time: start,
+        end_time: end,
+        duration,
       },
     });
 

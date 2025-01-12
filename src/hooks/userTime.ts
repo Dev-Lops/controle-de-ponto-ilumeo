@@ -72,6 +72,19 @@ export function useTimer(userCode: string) {
   }
 
   const toggleClock = async () => {
+    const today = new Date().toISOString().split("T")[0];
+
+    // Verificar se já existe uma sessão para o dia atual
+    const existingSessionToday = sessions.some(
+      (session) =>
+        new Date(session.start_time).toISOString().split("T")[0] === today
+    );
+
+    if (existingSessionToday) {
+      alert("Você já registrou uma sessão para hoje.");
+      return;
+    }
+
     if (isClockRunning) {
       const now = new Date();
       const sessionData = {

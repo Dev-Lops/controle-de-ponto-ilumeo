@@ -6,7 +6,7 @@ import { ButtonComponent } from "@/components/button";
 import { useTimer } from "@/hooks/userTime";
 import { NextSeo } from "next-seo";
 import { Skeleton } from "@/components/skeleton";
-import { UserChart } from "@/components/usersCharts";
+// import { UserChart } from "@/components/usersCharts";
 import { SessionsByDay } from "@/components/sessionsByDays";
 import { FiArrowLeftCircle } from "react-icons/fi";
 
@@ -104,20 +104,6 @@ export default function UserPage({ user }: UserPageProps) {
 
         {/* Dashboard */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 w-full">
-          {/* Gráfico */}
-          <div className="col-span-1">
-            {loading ? (
-              <Skeleton width="100%" height="200px" />
-            ) : (
-              <UserChart
-                sessions={sessions.map((session) => ({
-                  start_time: session.start_time,
-                  duration: session.duration || "0h 0m",
-                }))}
-              />
-            )}
-          </div>
-
           {/* Lista de Sessões por Dia */}
           <div className="col-span-1">
             <h3 className="text-lg font-bold mb-4">Dias Anteriores</h3>
