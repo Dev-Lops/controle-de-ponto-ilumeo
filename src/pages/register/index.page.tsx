@@ -1,16 +1,16 @@
-import React, { useState } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { UserService } from "@/services/userServices";
-import { useRouter } from "next/router";
-import { ButtonComponent } from "@/components/button";
-import { toast, ToastContainer } from "react-toastify";
-import { userSchema } from "@/validations/userValidations";
+import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { UserService } from '@/services/userServices';
+import { useRouter } from 'next/router';
+import { ButtonComponent } from '@/components/button';
+import { toast, ToastContainer } from 'react-toastify';
+import { userSchema } from '@/validations/userValidations';
 
-import { NextSeo } from "next-seo";
-import { FiArrowLeftCircle } from "react-icons/fi";
-import { InputField } from "@/components/inputField";
+import { NextSeo } from 'next-seo';
+import { FiArrowLeftCircle } from 'react-icons/fi';
+import { InputField } from '@/components/inputField';
 
 type UserFormData = z.infer<typeof userSchema>;
 
@@ -32,7 +32,7 @@ export default function RegisterUser() {
 
   const handleCodeNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.toUpperCase().slice(0, 8);
-    setValue("code_name", value, { shouldValidate: true });
+    setValue('code_name', value, { shouldValidate: true });
   };
 
   const onSubmit = async (data: UserFormData) => {
@@ -40,15 +40,15 @@ export default function RegisterUser() {
     try {
       const exists = await userService.checkUserExists(data.code_name);
       if (exists) {
-        toast.error("Já existe um usuário com este código.");
+        toast.error('Já existe um usuário com este código.');
         return;
       }
       await userService.createUser(data);
-      toast.success("Usuário cadastrado com sucesso!");
+      toast.success('Usuário cadastrado com sucesso!');
       reset();
-      setTimeout(() => router.push("/"), 2000);
+      setTimeout(() => router.push('/'), 2000);
     } catch (error: any) {
-      toast.error(error.message || "Erro inesperado.");
+      toast.error(error.message || 'Erro inesperado.');
     } finally {
       setLoading(false);
     }
@@ -61,7 +61,7 @@ export default function RegisterUser() {
         <ToastContainer position="bottom-right" autoClose={3000} />
         <div className="max-w-md w-full bg-input shadow-md rounded px-8 py-6">
           <ButtonComponent
-            onClick={() => router.push("/")}
+            onClick={() => router.push('/')}
             label={<FiArrowLeftCircle size={32} />}
             className="bg-transparent text-orange-400 hover:bg-transparent hover:text-orange-600"
           />

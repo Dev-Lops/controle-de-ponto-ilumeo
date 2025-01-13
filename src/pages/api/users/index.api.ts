@@ -1,5 +1,5 @@
-import { prisma } from "@/lib/prisma";
-import { NextApiRequest, NextApiResponse } from "next";
+import { prisma } from '@/lib/prisma';
+import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(
   req: NextApiRequest,
@@ -7,17 +7,17 @@ export default async function handler(
 ) {
   try {
     switch (req.method) {
-      case "POST":
+      case 'POST':
         return await UserController.createUser(req, res);
-      case "GET":
+      case 'GET':
         return await UserController.checkUserExists(req, res);
       default:
-        res.setHeader("Allow", ["POST", "GET"]);
-        return res.status(405).json({ message: "Método não permitido" });
+        res.setHeader('Allow', ['POST', 'GET']);
+        return res.status(405).json({ message: 'Método não permitido' });
     }
   } catch (error) {
-    console.error("Erro na API de usuários:", error);
-    return res.status(500).json({ message: "Erro interno no servidor." });
+    console.error('Erro na API de usuários:', error);
+    return res.status(500).json({ message: 'Erro interno no servidor.' });
   }
 }
 
@@ -34,7 +34,7 @@ class UserController {
     if (!name || !code_name) {
       return res
         .status(400)
-        .json({ message: "Nome e código são obrigatórios." });
+        .json({ message: 'Nome e código são obrigatórios.' });
     }
 
     try {
@@ -42,14 +42,14 @@ class UserController {
       if (existingUser) {
         return res
           .status(409)
-          .json({ message: "Já existe um usuário com este código." });
+          .json({ message: 'Já existe um usuário com este código.' });
       }
 
       const user = await UserService.createUser({ name, code_name });
       return res.status(201).json(user);
     } catch (error) {
-      console.error("Erro ao criar usuário:", error);
-      return res.status(500).json({ message: "Erro interno no servidor." });
+      console.error('Erro ao criar usuário:', error);
+      return res.status(500).json({ message: 'Erro interno no servidor.' });
     }
   }
 
@@ -59,16 +59,16 @@ class UserController {
   static async checkUserExists(req: NextApiRequest, res: NextApiResponse) {
     const { code_name } = req.query;
 
-    if (!code_name || typeof code_name !== "string") {
-      return res.status(400).json({ message: "Code Name é obrigatório." });
+    if (!code_name || typeof code_name !== 'string') {
+      return res.status(400).json({ message: 'Code Name é obrigatório.' });
     }
 
     try {
       const exists = await UserService.checkUserExists(code_name);
       return res.status(200).json({ exists });
     } catch (error) {
-      console.error("Erro ao verificar usuário:", error);
-      return res.status(500).json({ message: "Erro interno no servidor." });
+      console.error('Erro ao verificar usuário:', error);
+      return res.status(500).json({ message: 'Erro interno no servidor.' });
     }
   }
 }
@@ -84,8 +84,8 @@ class UserService {
     try {
       return await prisma.user.create({ data });
     } catch (error) {
-      console.error("Erro ao salvar o usuário no banco:", error);
-      throw new Error("Erro ao criar o usuário no banco de dados.");
+      console.error('Erro ao salvar o usuário no banco:', error);
+      throw new Error('Erro ao criar o usuário no banco de dados.');
     }
   }
 

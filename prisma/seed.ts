@@ -1,24 +1,24 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
 async function main() {
   // Adicionar ou atualizar usuários
   const user1 = await prisma.user.upsert({
-    where: { code_name: "ABCD1234" },
-    update: { name: "John Doe" },
+    where: { code_name: 'ABCD1234' },
+    update: { name: 'John Doe' },
     create: {
-      code_name: "ABCD1234",
-      name: "John Doe",
+      code_name: 'ABCD1234',
+      name: 'John Doe',
     },
   });
 
   const user2 = await prisma.user.upsert({
-    where: { code_name: "EFGH5678" },
-    update: { name: "Jane Doe" },
+    where: { code_name: 'EFGH5678' },
+    update: { name: 'Jane Doe' },
     create: {
-      code_name: "EFGH5678",
-      name: "Jane Doe",
+      code_name: 'EFGH5678',
+      name: 'Jane Doe',
     },
   });
 
@@ -38,7 +38,7 @@ async function main() {
     ],
   });
 
-  console.log("Seed completo!");
+  console.log('Seed completo!');
 }
 
 main()

@@ -1,14 +1,14 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import { prisma } from "@/lib/prisma";
+import { NextApiRequest, NextApiResponse } from 'next';
+import { prisma } from '@/lib/prisma';
 
 // Constantes para mensagens de erro
 const MESSAGES = {
-  methodNotAllowed: "Método não permitido",
-  internalServerError: "Erro interno no servidor",
-  invalidData: "Dados inválidos",
-  userCodeRequired: "userCode é obrigatório",
-  userNotFound: "Usuário não encontrado",
-  timerDeleted: "Timer removido com sucesso.",
+  methodNotAllowed: 'Método não permitido',
+  internalServerError: 'Erro interno no servidor',
+  invalidData: 'Dados inválidos',
+  userCodeRequired: 'userCode é obrigatório',
+  userNotFound: 'Usuário não encontrado',
+  timerDeleted: 'Timer removido com sucesso.',
 };
 
 /**
@@ -20,18 +20,18 @@ export default async function handler(
 ) {
   try {
     switch (req.method) {
-      case "GET":
+      case 'GET':
         return await handleGet(req, res);
-      case "POST":
+      case 'POST':
         return await handlePost(req, res);
-      case "DELETE":
+      case 'DELETE':
         return await handleDelete(req, res);
       default:
-        res.setHeader("Allow", ["GET", "POST", "DELETE"]);
+        res.setHeader('Allow', ['GET', 'POST', 'DELETE']);
         return res.status(405).json({ message: MESSAGES.methodNotAllowed });
     }
   } catch (error) {
-    console.error("Erro no endpoint /api/timer:", error);
+    console.error('Erro no endpoint /api/timer:', error);
     return res.status(500).json({ message: MESSAGES.internalServerError });
   }
 }
@@ -103,5 +103,5 @@ async function handleDelete(req: NextApiRequest, res: NextApiResponse) {
  * Valida e retorna um parâmetro de consulta como string.
  */
 function validateQueryParam(param: unknown): string | null {
-  return typeof param === "string" && param.trim() !== "" ? param : null;
+  return typeof param === 'string' && param.trim() !== '' ? param : null;
 }

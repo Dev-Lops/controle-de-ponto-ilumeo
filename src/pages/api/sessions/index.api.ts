@@ -1,26 +1,26 @@
-import { prisma } from "@/lib/prisma";
-import { NextApiRequest, NextApiResponse } from "next";
+import { prisma } from '@/lib/prisma';
+import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
   try {
-    if (req.method === "GET") {
+    if (req.method === 'GET') {
       await handleGet(req, res);
-    } else if (req.method === "POST") {
+    } else if (req.method === 'POST') {
       await handlePost(req, res);
     } else {
-      res.setHeader("Allow", ["GET", "POST"]);
+      res.setHeader('Allow', ['GET', 'POST']);
       return res
         .status(405)
-        .json({ success: false, message: "Método não permitido." });
+        .json({ success: false, message: 'Método não permitido.' });
     }
   } catch (error) {
-    console.error("Erro no endpoint de sessões:", error);
+    console.error('Erro no endpoint de sessões:', error);
     return res
       .status(500)
-      .json({ success: false, message: "Erro interno no servidor." });
+      .json({ success: false, message: 'Erro interno no servidor.' });
   }
 }
 
@@ -28,12 +28,12 @@ export default async function handler(
  * Retorna as sessões de trabalho de um usuário.
  */
 async function handleGet(req: NextApiRequest, res: NextApiResponse) {
-  const { codeName, page = "1", limit = "10" } = req.query;
+  const { codeName, page = '1', limit = '10' } = req.query;
 
-  if (!codeName || typeof codeName !== "string") {
+  if (!codeName || typeof codeName !== 'string') {
     return res
       .status(400)
-      .json({ success: false, message: "Code Name é obrigatório." });
+      .json({ success: false, message: 'Code Name é obrigatório.' });
   }
 
   const pageNumber = parseInt(page as string, 10) || 1;
@@ -56,7 +56,7 @@ async function handleGet(req: NextApiRequest, res: NextApiResponse) {
         where: { user_id: user.id },
         skip: (pageNumber - 1) * pageSize,
         take: pageSize,
-        orderBy: { start_time: "desc" },
+        orderBy: { start_time: 'desc' },
       }),
       prisma.workSession.count({ where: { user_id: user.id } }),
     ]);
@@ -71,10 +71,10 @@ async function handleGet(req: NextApiRequest, res: NextApiResponse) {
       },
     });
   } catch (error) {
-    console.error("Erro ao buscar sessões para:", codeName, error);
+    console.error('Erro ao buscar sessões para:', codeName, error);
     return res
       .status(500)
-      .json({ success: false, message: "Erro ao buscar sessões." });
+      .json({ success: false, message: 'Erro ao buscar sessões.' });
   }
 }
 
@@ -87,19 +87,19 @@ async function handlePost(req: NextApiRequest, res: NextApiResponse) {
   if (!codeName || !startTime) {
     return res
       .status(400)
-      .json({ success: false, message: "Dados incompletos." });
+      .json({ success: false, message: 'Dados incompletos.' });
   }
 
   if (isNaN(new Date(startTime).getTime())) {
     return res
       .status(400)
-      .json({ success: false, message: "Data de início inválida." });
+      .json({ success: false, message: 'Data de início inválida.' });
   }
 
   if (endTime && isNaN(new Date(endTime).getTime())) {
     return res
       .status(400)
-      .json({ success: false, message: "Data de fim inválida." });
+      .json({ success: false, message: 'Data de fim inválida.' });
   }
 
   try {
@@ -124,9 +124,9 @@ async function handlePost(req: NextApiRequest, res: NextApiResponse) {
 
     return res.status(201).json({ success: true, data: session });
   } catch (error) {
-    console.error("Erro ao criar sessão para:", codeName, error);
+    console.error('Erro ao criar sessão para:', codeName, error);
     return res
       .status(500)
-      .json({ success: false, message: "Erro ao criar sessão." });
+      .json({ success: false, message: 'Erro ao criar sessão.' });
   }
 }

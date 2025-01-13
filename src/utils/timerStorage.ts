@@ -1,5 +1,5 @@
-import { api } from "@/lib/axios";
-import axios from "axios";
+import { api } from '@/lib/axios';
+import axios from 'axios';
 
 interface TimerResponse {
   start_time?: string;
@@ -13,11 +13,11 @@ export class TimerStorage {
    */
   static async saveStartTime(userCode: string, startTime: Date): Promise<void> {
     if (!userCode) {
-      throw new Error("O código do usuário (userCode) é obrigatório.");
+      throw new Error('O código do usuário (userCode) é obrigatório.');
     }
 
     try {
-      await api.post("/timer", {
+      await api.post('/timer', {
         userCode,
         startTime: startTime.toISOString(),
       });
@@ -25,7 +25,7 @@ export class TimerStorage {
         `Timer salvo com sucesso para ${userCode}, start_time: ${startTime.toISOString()}`
       );
     } catch (error) {
-      TimerStorage.handleError("Erro ao salvar startTime no servidor.", error);
+      TimerStorage.handleError('Erro ao salvar startTime no servidor.', error);
     }
   }
 
@@ -36,11 +36,11 @@ export class TimerStorage {
    */
   static async getStartTime(userCode: string): Promise<Date | null> {
     if (!userCode) {
-      throw new Error("O código do usuário (userCode) é obrigatório.");
+      throw new Error('O código do usuário (userCode) é obrigatório.');
     }
 
     try {
-      const response = await api.get<TimerResponse>("/timer", {
+      const response = await api.get<TimerResponse>('/timer', {
         params: { userCode },
       });
 
@@ -51,7 +51,7 @@ export class TimerStorage {
 
       return new Date(response.data.start_time);
     } catch (error) {
-      TimerStorage.handleError("Erro ao buscar startTime no servidor.", error);
+      TimerStorage.handleError('Erro ao buscar startTime no servidor.', error);
     }
     return null; // Retorna null em caso de erro
   }
@@ -62,14 +62,14 @@ export class TimerStorage {
    */
   static async clearStartTime(userCode: string): Promise<void> {
     if (!userCode) {
-      throw new Error("O código do usuário (userCode) é obrigatório.");
+      throw new Error('O código do usuário (userCode) é obrigatório.');
     }
 
     try {
-      await api.delete("/timer", { params: { userCode } });
+      await api.delete('/timer', { params: { userCode } });
       console.log(`Timer para ${userCode} foi removido com sucesso.`);
     } catch (error) {
-      TimerStorage.handleError("Erro ao limpar startTime no servidor.", error);
+      TimerStorage.handleError('Erro ao limpar startTime no servidor.', error);
     }
   }
 
@@ -87,7 +87,7 @@ export class TimerStorage {
       throw new Error(error.response?.data?.message || defaultMessage);
     } else {
       console.error(`${defaultMessage}: Erro desconhecido`, error);
-      throw new Error("Erro desconhecido ao processar a solicitação.");
+      throw new Error('Erro desconhecido ao processar a solicitação.');
     }
   }
 }

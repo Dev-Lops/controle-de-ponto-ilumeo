@@ -1,5 +1,5 @@
-import React from "react";
-import { UseFormRegister, FieldValues, Path } from "react-hook-form";
+import React from 'react';
+import { UseFormRegister, FieldValues, Path } from 'react-hook-form';
 
 interface InputFieldProps<T extends FieldValues> {
   id: string;
@@ -36,7 +36,7 @@ export const InputField = <T extends FieldValues>({
       maxLength={maxLength}
       onChange={onChange}
       className={`mt-1 block w-full bg-transparent px-3 py-2 border border-orange-400 focus:ring-0 focus:border-orange-700 rounded-md shadow-sm ${
-        errorMessage ? "border-red-500" : "border-gray-300"
+        errorMessage ? 'border-red-500' : 'border-gray-300'
       }`}
     />
     {errorMessage && <p className="text-red-500 text-sm">{errorMessage}</p>}

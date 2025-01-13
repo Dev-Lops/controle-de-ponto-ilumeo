@@ -1,12 +1,12 @@
-import React, { useState } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/router";
-import { ButtonComponent } from "@/components/button";
-import { userCodeSchema } from "@/validations/userValidations";
-import { NextSeo } from "next-seo";
-import { FiPlus } from "react-icons/fi";
+import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from 'next/router';
+import { ButtonComponent } from '@/components/button';
+import { userCodeSchema } from '@/validations/userValidations';
+import { NextSeo } from 'next-seo';
+import { FiPlus } from 'react-icons/fi';
 
 // Tipagem baseada no schema Zod
 type FormData = z.infer<typeof userCodeSchema>;
@@ -26,7 +26,7 @@ const Home: React.FC = () => {
     setValue,
   } = useForm<FormData>({
     resolver: zodResolver(userCodeSchema),
-    mode: "onChange",
+    mode: 'onChange',
   });
 
   /**
@@ -35,7 +35,7 @@ const Home: React.FC = () => {
    */
   const handleCodeUserChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.toUpperCase().slice(0, 8);
-    setValue("codeUser", value, { shouldValidate: true });
+    setValue('codeUser', value, { shouldValidate: true });
   };
 
   /**
@@ -65,16 +65,16 @@ const Home: React.FC = () => {
         title="Página Inicial - Controle de Ponto"
         description="Gerencie suas horas de trabalho com a aplicação Controle de Ponto Ilumeo."
         openGraph={{
-          title: "Home - Controle de Ponto",
+          title: 'Home - Controle de Ponto',
           description:
-            "Gerencie suas horas de trabalho com a aplicação Controle de Ponto Ilumeo.",
-          url: "https://controle-de-ponto-ilumeo.vercel.app",
+            'Gerencie suas horas de trabalho com a aplicação Controle de Ponto Ilumeo.',
+          url: 'https://controle-de-ponto-ilumeo.vercel.app',
           images: [
             {
-              url: "https://controle-de-ponto-ilumeo.vercel.app/favicon.svg",
+              url: 'https://controle-de-ponto-ilumeo.vercel.app/favicon.svg',
               width: 500,
               height: 500,
-              alt: "Página Inicial do Controle de Ponto",
+              alt: 'Página Inicial do Controle de Ponto',
             },
           ],
         }}
@@ -105,7 +105,7 @@ const Home: React.FC = () => {
               <input
                 type="text"
                 id="codeUser"
-                {...register("codeUser")}
+                {...register('codeUser')}
                 onChange={handleCodeUserChange}
                 placeholder="Digite o código"
                 required
@@ -114,8 +114,8 @@ const Home: React.FC = () => {
                 aria-describedby="codeUserHelp"
                 className={`w-full text-xl border-none bg-transparent rounded outline-none focus:outline-none transition-all duration-200 ${
                   errors.codeUser
-                    ? "border-red-500 focus:ring-red-500"
-                    : "border-gray-300 focus:border-orange-500 focus:ring-orange-500"
+                    ? 'border-red-500 focus:ring-red-500'
+                    : 'border-gray-300 focus:border-orange-500 focus:ring-orange-500'
                 }`}
               />
               {errors.codeUser && (
@@ -129,7 +129,7 @@ const Home: React.FC = () => {
             </div>
 
             <ButtonComponent
-              label={loading ? null : "Acessar"}
+              label={loading ? null : 'Acessar'}
               type="submit"
               isDisabled={loading}
               isLoading={loading}

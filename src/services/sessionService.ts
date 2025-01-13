@@ -1,7 +1,7 @@
-import { api } from "@/lib/axios";
-import axios from "axios";
-import dayjs from "dayjs";
-import duration from "dayjs/plugin/duration";
+import { api } from '@/lib/axios';
+import axios from 'axios';
+import dayjs from 'dayjs';
+import duration from 'dayjs/plugin/duration';
 
 dayjs.extend(duration);
 
@@ -19,8 +19,8 @@ export interface CreateSessionInput {
 }
 
 const API_ENDPOINTS = {
-  FETCH_SESSIONS: "/sessions",
-  SAVE_SESSION: "/sessions",
+  FETCH_SESSIONS: '/sessions',
+  SAVE_SESSION: '/sessions',
 };
 
 type Duration = ReturnType<typeof dayjs.duration>;
@@ -35,7 +35,7 @@ export class SessionService {
     codeName: string
   ): Promise<{ sessions: Session[]; total: number }> {
     if (this.isEmptyString(codeName)) {
-      throw new Error("O código do usuário (codeName) não pode ser vazio.");
+      throw new Error('O código do usuário (codeName) não pode ser vazio.');
     }
 
     try {
@@ -46,7 +46,7 @@ export class SessionService {
       // Verifica se a resposta é um array
       const sessions = Array.isArray(response.data) ? response.data : [];
       if (sessions.length === 0) {
-        console.warn("Nenhuma sessão encontrada para o usuário.");
+        console.warn('Nenhuma sessão encontrada para o usuário.');
       }
 
       return {
@@ -57,12 +57,12 @@ export class SessionService {
                 new Date(session.start_time),
                 new Date(session.end_time)
               )
-            : "Ativo", // Mostra "Ativo" para sessões em andamento
+            : 'Ativo', // Mostra "Ativo" para sessões em andamento
         })),
         total: sessions.length,
       };
     } catch (error) {
-      this.handleError(error, "Erro ao buscar sessões");
+      this.handleError(error, 'Erro ao buscar sessões');
     }
   }
 
@@ -86,10 +86,10 @@ export class SessionService {
               new Date(savedSession.start_time),
               new Date(savedSession.end_time)
             )
-          : "Ativo",
+          : 'Ativo',
       };
     } catch (error) {
-      this.handleError(error, "Erro ao salvar sessão");
+      this.handleError(error, 'Erro ao salvar sessão');
     }
   }
 
@@ -99,7 +99,7 @@ export class SessionService {
    * @returns `true` se estiver vazia, caso contrário `false`
    */
   private isEmptyString(value: string): boolean {
-    return !value || typeof value !== "string" || value.trim() === "";
+    return !value || typeof value !== 'string' || value.trim() === '';
   }
 
   /**
@@ -108,7 +108,7 @@ export class SessionService {
    */
   private validateResponse(response: any): void {
     if (!response || !response.data) {
-      throw new Error("Resposta da API está inválida ou vazia.");
+      throw new Error('Resposta da API está inválida ou vazia.');
     }
   }
 
@@ -124,7 +124,7 @@ export class SessionService {
       this.isEmptyString(startTime) ||
       this.isEmptyString(endTime)
     ) {
-      throw new Error("Os dados da sessão estão incompletos ou inválidos.");
+      throw new Error('Os dados da sessão estão incompletos ou inválidos.');
     }
   }
 

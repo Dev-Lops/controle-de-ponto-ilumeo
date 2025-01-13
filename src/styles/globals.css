@@ -37,16 +37,16 @@
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: "Montserrat", serif;
+  font-family: 'Montserrat', serif;
 
   /* Remove setas em inputs de número */
-  input[type="number"]::-webkit-inner-spin-button,
-  input[type="number"]::-webkit-outer-spin-button {
+  input[type='number']::-webkit-inner-spin-button,
+  input[type='number']::-webkit-outer-spin-button {
     -webkit-appearance: none;
     margin: 0;
   }
 
-  input[type="number"] {
+  input[type='number'] {
     appearance: textfield;
   }
 }

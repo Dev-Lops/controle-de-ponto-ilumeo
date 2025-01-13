@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from '@prisma/client';
 
 /**
  * Classe para gerenciar a instância do Prisma Client.
@@ -15,13 +15,13 @@ class PrismaSingleton {
     if (!PrismaSingleton.instance) {
       PrismaSingleton.instance = new PrismaClient({
         log:
-          process.env.NODE_ENV === "development"
-            ? ["query", "warn"]
-            : ["error"],
+          process.env.NODE_ENV === 'development'
+            ? ['query', 'warn']
+            : ['error'],
       });
 
       // Configuração para garantir uma única instância no modo de desenvolvimento
-      if (process.env.NODE_ENV !== "production") {
+      if (process.env.NODE_ENV !== 'production') {
         const globalForPrisma = global as unknown as { prisma?: PrismaClient };
         if (!globalForPrisma.prisma) {
           globalForPrisma.prisma = PrismaSingleton.instance;

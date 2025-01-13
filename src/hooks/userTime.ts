@@ -1,20 +1,20 @@
-import { useEffect, useState } from "react";
-import { Session, SessionService } from "@/services/sessionService";
-import { TimerStorage } from "@/utils/timerStorage";
+import { useEffect, useState } from 'react';
+import { Session, SessionService } from '@/services/sessionService';
+import { TimerStorage } from '@/utils/timerStorage';
 
 export function useTimer(userCode: string) {
   const sessionService = new SessionService();
   const [isClockRunning, setIsClockRunning] = useState(false);
   const [startTime, setStartTime] = useState<Date | null>(null);
-  const [currentTime, setCurrentTime] = useState("0h 00m");
+  const [currentTime, setCurrentTime] = useState('0h 00m');
   const [sessions, setSessions] = useState<Session[]>([]);
-  const [totalDuration, setTotalDuration] = useState("0h 00m");
+  const [totalDuration, setTotalDuration] = useState('0h 00m');
   const [loading, setLoading] = useState(true);
 
   const resetTimerState = () => {
     setIsClockRunning(false); // Para o contador
     setStartTime(null); // Limpa o horário inicial
-    setCurrentTime("0h 00m"); // Reseta o contador
+    setCurrentTime('0h 00m'); // Reseta o contador
   };
 
   useEffect(() => {
@@ -48,7 +48,7 @@ export function useTimer(userCode: string) {
         setIsClockRunning(true);
       }
     } catch (error) {
-      console.error("Erro ao inicializar timer:", error);
+      console.error('Erro ao inicializar timer:', error);
     } finally {
       setLoading(false);
     }
@@ -89,7 +89,7 @@ export function useTimer(userCode: string) {
       // Adicione ao estado garantindo o tipo correto
       setSessions((prev) => [sessionData, ...prev]);
     } catch (error) {
-      console.error("Erro ao salvar sessão:", error);
+      console.error('Erro ao salvar sessão:', error);
     } finally {
       resetTimerState(); // Reseta o timer após salvar
     }

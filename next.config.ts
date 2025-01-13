@@ -1,8 +1,8 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
-  pageExtensions: ["page.tsx", "api.ts", "api.tsx"],
+  pageExtensions: ['page.tsx', 'api.ts', 'api.tsx'],
   compress: true, // Habilita compressão de saída
 };
 

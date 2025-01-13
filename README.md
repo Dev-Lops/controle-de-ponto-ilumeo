@@ -1,4 +1,3 @@
-
 # **Controle de Ponto - Ilumeo**
 
 Uma aplicação para controle de ponto e gestão de horas de trabalho. Desenvolvida com **Next.js**, **Prisma**, **PostgreSQL**, **Cypress**, e mais, a aplicação possui funcionalidades para registro de ponto, gestão de usuários e autenticação.

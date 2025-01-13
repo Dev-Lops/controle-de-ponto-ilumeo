@@ -1,14 +1,14 @@
-import React, { useState } from "react";
-import { useRouter } from "next/router";
-import { ButtonComponent } from "@/components/button";
-import { NextSeo } from "next-seo";
+import React, { useState } from 'react';
+import { useRouter } from 'next/router';
+import { ButtonComponent } from '@/components/button';
+import { NextSeo } from 'next-seo';
 
 /**
  * Componente para autenticação de administrador.
  */
 const VerifyAdmin: React.FC = () => {
-  const [password, setPassword] = useState<string>("");
-  const [error, setError] = useState<string>("");
+  const [password, setPassword] = useState<string>('');
+  const [error, setError] = useState<string>('');
   const router = useRouter();
 
   // Obtém a senha do administrador do arquivo .env
@@ -22,9 +22,9 @@ const VerifyAdmin: React.FC = () => {
     e.preventDefault();
 
     if (password === adminPassword) {
-      router.push("/register");
+      router.push('/register');
     } else {
-      setError("Senha incorreta. Tente novamente.");
+      setError('Senha incorreta. Tente novamente.');
     }
   };
 

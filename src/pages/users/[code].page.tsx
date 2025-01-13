@@ -1,13 +1,13 @@
-import React from "react";
-import { GetServerSideProps } from "next";
-import { prisma } from "@/lib/prisma";
-import { useRouter } from "next/router";
-import { ButtonComponent } from "@/components/button";
-import { useTimer } from "@/hooks/userTime";
-import { NextSeo } from "next-seo";
-import { Skeleton } from "@/components/skeleton";
-import { SessionsByDay } from "@/components/sessionsByDays";
-import { FiArrowLeftCircle } from "react-icons/fi";
+import React from 'react';
+import { GetServerSideProps } from 'next';
+import { prisma } from '@/lib/prisma';
+import { useRouter } from 'next/router';
+import { ButtonComponent } from '@/components/button';
+import { useTimer } from '@/hooks/userTime';
+import { NextSeo } from 'next-seo';
+import { Skeleton } from '@/components/skeleton';
+import { SessionsByDay } from '@/components/sessionsByDays';
+import { FiArrowLeftCircle } from 'react-icons/fi';
 
 interface UserPageProps {
   user: {
@@ -28,11 +28,11 @@ const UserPage: React.FC<UserPageProps> = ({ user }) => {
     sessions,
     toggleClock,
     loading,
-  } = useTimer(user?.code_name || "");
+  } = useTimer(user?.code_name || '');
 
   // Renderizar página de usuário não encontrado
   if (!user) {
-    return <UserNotFound onReturn={() => router.push("/")} />;
+    return <UserNotFound onReturn={() => router.push('/')} />;
   }
 
   return (
@@ -42,7 +42,7 @@ const UserPage: React.FC<UserPageProps> = ({ user }) => {
         <Header
           user={user}
           loading={loading}
-          onReturn={() => router.push("/")}
+          onReturn={() => router.push('/')}
         />
         <TimerSection
           loading={loading}
@@ -136,7 +136,7 @@ const TimerSection: React.FC<{
       <span className="text-orange-400">{totalDuration}</span>
     </div>
     <ButtonComponent
-      label={isClockRunning ? "Hora de saída" : "Hora de entrada"}
+      label={isClockRunning ? 'Hora de saída' : 'Hora de entrada'}
       onClick={onToggleClock}
       isLoading={loading}
       className="w-full bg-orange-500 hover:bg-orange-600 text-black"
@@ -169,7 +169,7 @@ export const getServerSideProps: GetServerSideProps<UserPageProps> = async (
 ) => {
   const { code } = context.params!;
 
-  if (!code || typeof code !== "string" || code.trim() === "") {
+  if (!code || typeof code !== 'string' || code.trim() === '') {
     return {
       props: { user: null },
     };
@@ -186,7 +186,7 @@ export const getServerSideProps: GetServerSideProps<UserPageProps> = async (
       props: { user: { ...user, createdAt: user.createdAt.toISOString() } },
     };
   } catch (error) {
-    console.error("Erro ao buscar o usuário:", error);
+    console.error('Erro ao buscar o usuário:', error);
     return { props: { user: null } };
   }
 };

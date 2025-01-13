@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 // Validação básica de strings para reutilização
 const stringField = (fieldName: string, min: number, max: number) =>
@@ -20,11 +20,11 @@ const codeField = (fieldName: string, length: number) =>
 
 // Esquema para validar o código do usuário
 export const userCodeSchema = z.object({
-  codeUser: codeField("Código do usuário", 8),
+  codeUser: codeField('Código do usuário', 8),
 });
 
 // Esquema para validar os dados do usuário
 export const userSchema = z.object({
-  name: stringField("Nome", 1, 100), // Ajuste o máximo conforme necessário
-  code_name: codeField("Código", 8),
+  name: stringField('Nome', 1, 100), // Ajuste o máximo conforme necessário
+  code_name: codeField('Código', 8),
 });

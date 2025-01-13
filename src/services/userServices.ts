@@ -1,4 +1,4 @@
-import { api } from "@/lib/axios";
+import { api } from '@/lib/axios';
 
 export interface CreateUserInput {
   name: string;
@@ -6,7 +6,7 @@ export interface CreateUserInput {
 }
 
 export class UserService {
-  private readonly USER_ENDPOINT = "/users";
+  private readonly USER_ENDPOINT = '/users';
 
   /**
    * Cria um novo usuário.
@@ -15,13 +15,13 @@ export class UserService {
    */
   async createUser(data: CreateUserInput): Promise<any> {
     try {
-      const response = await api.post("/users", data);
+      const response = await api.post('/users', data);
       return response.data;
     } catch (error: any) {
       if (error.response?.status === 409) {
-        throw new Error("Já existe um usuário com este código.");
+        throw new Error('Já existe um usuário com este código.');
       }
-      throw new Error("Erro ao criar o usuário.");
+      throw new Error('Erro ao criar o usuário.');
     }
   }
 
@@ -32,11 +32,11 @@ export class UserService {
    */
   async checkUserExists(code_name: string): Promise<boolean> {
     try {
-      const response = await api.get("/users", { params: { code_name } });
+      const response = await api.get('/users', { params: { code_name } });
       return response.data.exists;
     } catch (error) {
-      console.error("Erro ao verificar usuário:", error);
-      throw new Error("Erro ao verificar usuário.");
+      console.error('Erro ao verificar usuário:', error);
+      throw new Error('Erro ao verificar usuário.');
     }
   }
 
@@ -53,7 +53,7 @@ export class UserService {
     specificStatus?: number,
     specificMessage?: string
   ): never {
-    if (error instanceof Error && "response" in error) {
+    if (error instanceof Error && 'response' in error) {
       const axiosError = error as any;
       const status = axiosError.response?.status;
 

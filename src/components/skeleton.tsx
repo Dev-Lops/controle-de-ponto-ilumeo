@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 interface SkeletonProps {
   width?: string;
@@ -7,9 +7,9 @@ interface SkeletonProps {
 }
 
 export const Skeleton: React.FC<SkeletonProps> = ({
-  width = "100%",
-  height = "1rem",
-  className = "",
+  width = '100%',
+  height = '1rem',
+  className = '',
 }) => {
   return (
     <div
