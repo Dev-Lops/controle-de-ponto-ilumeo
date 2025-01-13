@@ -14,6 +14,8 @@ Uma aplicação para controle de ponto e gestão de horas de trabalho. Desenvolv
 - **Administração.**
   - Link para a página de verificação do admin.
   - Botão de adição para cadastro e gestão de usuários.
+ 
+  - Senha para criar um novo usuário: minhasenha123.
 
 ---
 
