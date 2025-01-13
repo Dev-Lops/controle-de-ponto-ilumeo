@@ -43,19 +43,23 @@ export class SessionService {
         params: { codeName },
       });
 
-      this.validateResponse(response);
+      // Verifica se a resposta é um array
+      const sessions = Array.isArray(response.data) ? response.data : [];
+      if (sessions.length === 0) {
+        console.warn("Nenhuma sessão encontrada para o usuário.");
+      }
 
       return {
-        sessions: response.data.sessions.map((session: Session) => ({
+        sessions: sessions.map((session: Session) => ({
           ...session,
           duration: session.end_time
             ? this.calculateDuration(
                 new Date(session.start_time),
                 new Date(session.end_time)
               )
-            : undefined,
+            : "Ativo", // Mostra "Ativo" para sessões em andamento
         })),
-        total: response.data.total || 0,
+        total: sessions.length,
       };
     } catch (error) {
       this.handleError(error, "Erro ao buscar sessões");
@@ -73,7 +77,17 @@ export class SessionService {
     try {
       const response = await api.post(API_ENDPOINTS.SAVE_SESSION, session);
       this.validateResponse(response);
-      return response.data;
+
+      const savedSession = response.data;
+      return {
+        ...savedSession,
+        duration: savedSession.end_time
+          ? this.calculateDuration(
+              new Date(savedSession.start_time),
+              new Date(savedSession.end_time)
+            )
+          : "Ativo",
+      };
     } catch (error) {
       this.handleError(error, "Erro ao salvar sessão");
     }

@@ -30,6 +30,7 @@ const UserPage: React.FC<UserPageProps> = ({ user }) => {
     loading,
   } = useTimer(user?.code_name || "");
 
+  // Renderizar página de usuário não encontrado
   if (!user) {
     return <UserNotFound onReturn={() => router.push("/")} />;
   }
@@ -56,8 +57,9 @@ const UserPage: React.FC<UserPageProps> = ({ user }) => {
   );
 };
 
+// Componente para exibir quando o usuário não é encontrado
 const UserNotFound: React.FC<{ onReturn: () => void }> = ({ onReturn }) => (
-  <div className="flex flex-col w-[450] h-screen items-center justify-center">
+  <div className="flex flex-col w-full h-screen items-center justify-center">
     <p className="text-lg text-red-500 mb-4">Usuário não encontrado.</p>
     <ButtonComponent
       label="Retornar à Home"
@@ -67,6 +69,7 @@ const UserNotFound: React.FC<{ onReturn: () => void }> = ({ onReturn }) => (
   </div>
 );
 
+// Cabeçalho da página do usuário
 const Header: React.FC<{
   user: { code_name: string; name: string };
   loading: boolean;
@@ -99,45 +102,49 @@ const Header: React.FC<{
   </header>
 );
 
+// Sessão do relógio de ponto
 const TimerSection: React.FC<{
   loading: boolean;
   isClockRunning: boolean;
   currentTime: string;
   totalDuration: string;
   onToggleClock: () => void;
-}> = (props) => {
-  const { loading, isClockRunning, currentTime, totalDuration, onToggleClock } =
-    props;
-  return (
-    <div className="flex flex-col items-start w-full pb-4">
-      {loading ? (
-        <>
-          <Skeleton width="50%" height="2rem" className="mb-2" />
-          <Skeleton width="80%" height="1.5rem" />
-        </>
-      ) : (
-        <div className="flex items-center gap-2">
-          <p className="text-3xl font-bold">{currentTime}</p>
-          {isClockRunning && (
-            <span className="w-3 h-3 bg-lime-300 rounded-full animate-pulse"></span>
-          )}
-        </div>
-      )}
-      <p className="text-xs pb-2">Horas de hoje</p>
-      <div className="flex w-full text-sm justify-between mb-3">
-        <p>Horas totais</p>
-        <span className="text-orange-400">{totalDuration}</span>
+}> = ({
+  loading,
+  isClockRunning,
+  currentTime,
+  totalDuration,
+  onToggleClock,
+}) => (
+  <div className="flex flex-col items-start w-full pb-4">
+    {loading ? (
+      <>
+        <Skeleton width="50%" height="2rem" className="mb-2" />
+        <Skeleton width="80%" height="1.5rem" />
+      </>
+    ) : (
+      <div className="flex items-center gap-2">
+        <p className="text-3xl font-bold">{currentTime}</p>
+        {isClockRunning && (
+          <span className="w-3 h-3 bg-lime-300 rounded-full animate-pulse"></span>
+        )}
       </div>
-      <ButtonComponent
-        label={isClockRunning ? "Hora de saída" : "Hora de entrada"}
-        onClick={onToggleClock}
-        isLoading={loading}
-        className="w-full bg-orange-500 hover:bg-orange-600 text-black"
-      />
+    )}
+    <p className="text-xs pb-2">Horas de hoje</p>
+    <div className="flex w-full text-sm justify-between mb-3">
+      <p>Horas totais</p>
+      <span className="text-orange-400">{totalDuration}</span>
     </div>
-  );
-};
+    <ButtonComponent
+      label={isClockRunning ? "Hora de saída" : "Hora de entrada"}
+      onClick={onToggleClock}
+      isLoading={loading}
+      className="w-full bg-orange-500 hover:bg-orange-600 text-black"
+    />
+  </div>
+);
 
+// Dashboard de sessões agrupadas por dia
 const Dashboard: React.FC<{ sessions: any[]; loading: boolean }> = ({
   sessions,
   loading,
@@ -156,6 +163,7 @@ const Dashboard: React.FC<{ sessions: any[]; loading: boolean }> = ({
   </div>
 );
 
+// Função para buscar os dados do usuário no lado do servidor
 export const getServerSideProps: GetServerSideProps<UserPageProps> = async (
   context
 ) => {
@@ -171,7 +179,9 @@ export const getServerSideProps: GetServerSideProps<UserPageProps> = async (
     const user = await prisma.user.findUnique({
       where: { code_name: String(code) },
     });
+
     if (!user) return { props: { user: null } };
+
     return {
       props: { user: { ...user, createdAt: user.createdAt.toISOString() } },
     };
