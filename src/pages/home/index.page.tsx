@@ -18,9 +18,6 @@ const Home: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-
-  
-
   // Configuração do formulário com validação via Zod
   const {
     register,
