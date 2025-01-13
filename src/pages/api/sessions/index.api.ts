@@ -1,6 +1,17 @@
 import { prisma } from "@/lib/prisma";
 import { NextApiRequest, NextApiResponse } from "next";
 
+// Constantes para validação e mensagens de erro
+const MESSAGES = {
+  methodNotAllowed: "Método não permitido",
+  codeNameRequired: "Code Name é obrigatório",
+  userNotFound: (codeName: string) =>
+    `Usuário com code_name ${codeName} não encontrado.`,
+  sessionExists: "Já existe uma sessão registrada para este dia.",
+  internalServerError: "Erro interno no servidor",
+  invalidData: "Dados inválidos",
+};
+
 /**
  * Manipula solicitações relacionadas às sessões de trabalho.
  */
@@ -9,18 +20,17 @@ export default async function handler(
   res: NextApiResponse
 ) {
   try {
-    switch (req.method) {
-      case "GET":
-        return handleGet(req, res);
-      case "POST":
-        return handlePost(req, res);
-      default:
-        res.setHeader("Allow", ["GET", "POST"]);
-        return res.status(405).json({ message: "Método não permitido" });
+    if (req.method === "GET") {
+      await handleGet(req, res);
+    } else if (req.method === "POST") {
+      await handlePost(req, res);
+    } else {
+      res.setHeader("Allow", ["GET", "POST"]);
+      return res.status(405).json({ message: MESSAGES.methodNotAllowed });
     }
   } catch (error) {
     console.error("Erro na API de sessões:", error);
-    return res.status(500).json({ message: "Erro interno no servidor" });
+    return res.status(500).json({ message: MESSAGES.internalServerError });
   }
 }
 
@@ -31,11 +41,11 @@ async function handleGet(req: NextApiRequest, res: NextApiResponse) {
   const { codeName, page = "1", limit = "10" } = req.query;
 
   if (!codeName || typeof codeName !== "string") {
-    return res.status(400).json({ message: "Code Name é obrigatório" });
+    return res.status(400).json({ message: MESSAGES.codeNameRequired });
   }
 
-  const pageNumber = parseInt(page as string, 10);
-  const pageSize = parseInt(limit as string, 10);
+  const pageNumber = parsePositiveInt(page as string, 1);
+  const pageSize = parsePositiveInt(limit as string, 10);
 
   try {
     const user = await prisma.user.findUnique({
@@ -43,21 +53,18 @@ async function handleGet(req: NextApiRequest, res: NextApiResponse) {
     });
 
     if (!user) {
-      return res
-        .status(404)
-        .json({ message: `Usuário com code_name ${codeName} não encontrado.` });
+      return res.status(404).json({ message: MESSAGES.userNotFound(codeName) });
     }
 
-    const sessions = await prisma.workSession.findMany({
-      where: { user_id: user.id },
-      skip: (pageNumber - 1) * pageSize,
-      take: pageSize,
-      orderBy: { start_time: "desc" },
-    });
-
-    const totalSessions = await prisma.workSession.count({
-      where: { user_id: user.id },
-    });
+    const [sessions, totalSessions] = await Promise.all([
+      prisma.workSession.findMany({
+        where: { user_id: user.id },
+        skip: (pageNumber - 1) * pageSize,
+        take: pageSize,
+        orderBy: { start_time: "desc" },
+      }),
+      prisma.workSession.count({ where: { user_id: user.id } }),
+    ]);
 
     return res.status(200).json({
       sessions,
@@ -67,7 +74,7 @@ async function handleGet(req: NextApiRequest, res: NextApiResponse) {
     });
   } catch (error) {
     console.error("Erro ao buscar sessões:", error);
-    return res.status(500).json({ message: "Erro interno no servidor" });
+    return res.status(500).json({ message: MESSAGES.internalServerError });
   }
 }
 
@@ -78,7 +85,7 @@ async function handlePost(req: NextApiRequest, res: NextApiResponse) {
   const { codeName, startTime, endTime } = req.body;
 
   if (!codeName || !startTime) {
-    return res.status(400).json({ message: "Dados inválidos" });
+    return res.status(400).json({ message: MESSAGES.invalidData });
   }
 
   try {
@@ -87,27 +94,24 @@ async function handlePost(req: NextApiRequest, res: NextApiResponse) {
     });
 
     if (!user) {
-      return res.status(404).json({ message: "Usuário não encontrado" });
+      return res.status(404).json({ message: MESSAGES.userNotFound(codeName) });
     }
 
     const start = new Date(startTime);
     const end = endTime ? new Date(endTime) : null;
 
-    // Verificar se já existe uma sessão para o dia atual
-    const existingSession = await prisma.workSession.findFirst({
+    const sessionExists = await prisma.workSession.findFirst({
       where: {
         user_id: user.id,
         start_time: {
-          gte: new Date(start.toISOString().split("T")[0] + "T00:00:00Z"),
-          lt: new Date(start.toISOString().split("T")[0] + "T23:59:59Z"),
+          gte: new Date(`${start.toISOString().split("T")[0]}T00:00:00Z`),
+          lt: new Date(`${start.toISOString().split("T")[0]}T23:59:59Z`),
         },
       },
     });
 
-    if (existingSession) {
-      return res.status(400).json({
-        message: "Já existe uma sessão registrada para este dia.",
-      });
+    if (sessionExists) {
+      return res.status(400).json({ message: MESSAGES.sessionExists });
     }
 
     const session = await prisma.workSession.create({
@@ -121,6 +125,14 @@ async function handlePost(req: NextApiRequest, res: NextApiResponse) {
     return res.status(201).json(session);
   } catch (error) {
     console.error("Erro ao salvar sessão:", error);
-    return res.status(500).json({ message: "Erro ao salvar sessão." });
+    return res.status(500).json({ message: MESSAGES.internalServerError });
   }
+}
+
+/**
+ * Função utilitária para converter strings em números positivos.
+ */
+function parsePositiveInt(value: string, defaultValue: number): number {
+  const parsed = parseInt(value, 10);
+  return isNaN(parsed) || parsed <= 0 ? defaultValue : parsed;
 }

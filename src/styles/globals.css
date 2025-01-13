@@ -2,62 +2,44 @@
 @tailwind components;
 @tailwind utilities;
 
+/* === Variáveis Globais === */
 :root {
+  /* Paleta de cores - Modo Claro */
   --background: #ffffff;
   --foreground: #151f2b;
-
-  --input: #f4f4f4;
-  /* Fundo do input */
-  --input-border: #dcdcdc;
-  /* Borda do input */
-  --input-placeholder: #888888;
-  /* Placeholder do input */
-
-  --button: #fe8a00;
-  /* Fundo do botão */
-  --button-text: #ffffff;
-  /* Texto do botão */
-  --button-hover: #e67900;
-  /* Cor ao passar o mouse no botão */
-
-  --border: #e0e0e0;
-  /* Cor de bordas gerais */
-  --shadow: rgba(0, 0, 0, 0.1);
-  /* Sombra leve */
+  --input: #f4f4f4; /* Fundo do input */
+  --input-border: #dcdcdc; /* Borda do input */
+  --input-placeholder: #888888; /* Placeholder do input */
+  --button: #fe8a00; /* Fundo do botão */
+  --button-text: #ffffff; /* Texto do botão */
+  --button-hover: #e67900; /* Cor ao passar o mouse no botão */
+  --border: #e0e0e0; /* Cor de bordas gerais */
+  --shadow: rgba(0, 0, 0, 0.1); /* Sombra leve */
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
+    /* Paleta de cores - Modo Escuro */
     --background: #151f2b;
     --foreground: #ededed;
-
-    --input: #1e2733;
-    /* Fundo do input */
-    --input-border: #3b4a5b;
-    /* Borda do input */
-    --input-placeholder: #8995a5;
-    /* Placeholder do input */
-
-    --button: #fe8a00;
-    /* Fundo do botão */
-    --button-text: #151f2b;
-    /* Texto do botão */
-    --button-hover: #e67900;
-    /* Cor ao passar o mouse no botão */
-
-    --border: #2a3542;
-    /* Cor de bordas gerais */
-    --shadow: rgba(0, 0, 0, 0.3);
-    /* Sombra mais forte */
+    --input: #1e2733; /* Fundo do input */
+    --input-border: #3b4a5b; /* Borda do input */
+    --input-placeholder: #8995a5; /* Placeholder do input */
+    --button: #fe8a00; /* Fundo do botão */
+    --button-text: #151f2b; /* Texto do botão */
+    --button-hover: #e67900; /* Cor ao passar o mouse no botão */
+    --border: #2a3542; /* Cor de bordas gerais */
+    --shadow: rgba(0, 0, 0, 0.3); /* Sombra mais forte */
   }
 }
 
+/* === Estilização Global === */
 body {
   color: var(--foreground);
   background: var(--background);
   font-family: "Montserrat", serif;
 
-  /* Remove setas no Chrome, Edge, Safari, e outros navegadores modernos */
+  /* Remove setas em inputs de número */
   input[type="number"]::-webkit-inner-spin-button,
   input[type="number"]::-webkit-outer-spin-button {
     -webkit-appearance: none;
@@ -67,67 +49,84 @@ body {
   input[type="number"] {
     appearance: textfield;
   }
+}
 
-  .loader {
-    position: relative;
+/* === Loader (Carregamento) === */
+.loader {
+  position: relative;
+}
+
+.loader .outer,
+.loader .middle,
+.loader .inner {
+  border: 3px solid transparent;
+  border-top-color: #e67900;
+  border-right-color: transparent;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+}
+
+.loader .outer {
+  width: 3.5em;
+  height: 3.5em;
+  margin-left: -1.75em;
+  margin-top: -1.75em;
+  animation: spin 2s linear infinite;
+}
+
+.loader .middle {
+  width: 2.1em;
+  height: 2.1em;
+  margin-left: -1.05em;
+  margin-top: -1.05em;
+  animation: spin 1.75s linear reverse infinite;
+}
+
+.loader .inner {
+  width: 0.8em;
+  height: 0.8em;
+  margin-left: -0.4em;
+  margin-top: -0.4em;
+  animation: spin 1.5s linear infinite;
+}
+
+/* === Animações === */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
   }
+}
 
-  .outer,
-  .middle,
-  .inner {
-    border: 3px solid transparent;
-    border-top-color: #e67900;
-    border-right-color: transparent;
-    border-radius: 50%;
-    position: absolute;
-    top: 50%;
-    left: 50%;
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
   }
-
-  .outer {
-    width: 3.5em;
-    height: 3.5em;
-    margin-left: -1.75em;
-    margin-top: -1.75em;
-    animation: spin 2s linear infinite;
+  50% {
+    opacity: 0.5;
   }
+}
 
-  .middle {
-    width: 2.1em;
-    height: 2.1em;
-    margin-left: -1.05em;
-    margin-top: -1.05em;
-    animation: spin 1.75s linear reverse infinite;
-  }
+.animate-pulse {
+  animation: pulse 1.5s ease-in-out infinite;
+}
 
-  .inner {
-    width: 0.8em;
-    height: 0.8em;
-    margin-left: -0.4em;
-    margin-top: -0.4em;
-    animation: spin 1.5s linear infinite;
-  }
+/* === Componentes Utilitários === */
+/* Botões */
+.button-primary {
+  background: var(--button);
+  color: var(--button-text);
+  transition: background-color 0.3s ease;
+}
 
-  @keyframes spin {
-    to {
-      transform: rotate(360deg);
-    }
-  }
+.button-primary:hover {
+  background: var(--button-hover);
+}
 
-  @keyframes pulse {
-
-    0%,
-    100% {
-      opacity: 1;
-    }
-
-    50% {
-      opacity: 0.5;
-    }
-  }
-
-  .animate-pulse {
-    animation: pulse 1.5s ease-in-out infinite;
-  }
-
+.button-disabled {
+  background: var(--input-border);
+  color: var(--input-placeholder);
+  cursor: not-allowed;
 }

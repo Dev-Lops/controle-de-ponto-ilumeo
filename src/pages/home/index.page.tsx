@@ -8,14 +8,20 @@ import { userCodeSchema } from "@/validations/userValidations";
 import { NextSeo } from "next-seo";
 import { FiPlus } from "react-icons/fi";
 
-// Define a tipagem do formulário com base no schema do Zod
+// Tipagem baseada no schema Zod
 type FormData = z.infer<typeof userCodeSchema>;
 
-export default function Home() {
-  const [loading, setLoading] = useState(false); // Controla o estado de loading
+/**
+ * Página Inicial - Home
+ */
+const Home: React.FC = () => {
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  // Configuração do formulário com validação do Zod
+
+  
+
+  // Configuração do formulário com validação via Zod
   const {
     register,
     handleSubmit,
@@ -23,29 +29,38 @@ export default function Home() {
     setValue,
   } = useForm<FormData>({
     resolver: zodResolver(userCodeSchema),
-    mode: "onChange", // Validação em tempo real
+    mode: "onChange",
   });
 
-  // Atualizar o valor do input para letras maiúsculas e limitar a 8 caracteres
+  /**
+   * Atualiza o valor do campo do código do usuário, garantindo letras maiúsculas e no máximo 8 caracteres.
+   * @param e Evento de mudança no input
+   */
   const handleCodeUserChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.toUpperCase().slice(0, 8); // Garante maiúsculas e no máximo 8 caracteres
+    const value = e.target.value.toUpperCase().slice(0, 8);
     setValue("codeUser", value, { shouldValidate: true });
   };
 
-  // Lidar com o envio do formulário
+  /**
+   * Lida com o envio do formulário, redirecionando o usuário para sua página pessoal.
+   * @param data Dados do formulário
+   */
   const onSubmit = async (data: FormData) => {
-    setLoading(true); // Ativa o estado de loading
+    setLoading(true);
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // Simula carregamento
+      await new Promise((resolve) => setTimeout(resolve, 1000)); // Simula um carregamento
       router.push(`/users/${data.codeUser}`);
     } finally {
-      setLoading(false); // Desativa o estado de loading
+      setLoading(false);
     }
   };
 
-  function handleNewUser() {
+  /**
+   * Redireciona o usuário para a página de verificação de administrador.
+   */
+  const handleNewUser = () => {
     router.push(`/admin/verify`);
-  }
+  };
 
   return (
     <>
@@ -70,21 +85,19 @@ export default function Home() {
       <div className="flex flex-col items-center justify-center h-screen px-4 sm:px-6 bg-background text-foreground">
         <div className="flex flex-col w-full max-w-sm">
           {/* Cabeçalho */}
-          <div className="flex justify-between items-center mb-8">
-            <h1 className="text-3xl text-start font-light ">
+          <header className="flex justify-between items-center mb-8">
+            <h1 className="text-3xl text-start font-light">
               Ponto <span className="font-bold">Ilumeo</span>
             </h1>
-
             <ButtonComponent
               onClick={handleNewUser}
-              text={<FiPlus size={32} />}
+              label={<FiPlus size={32} />}
               className="bg-transparent text-orange-400 hover:bg-transparent hover:rotate-90"
             />
-          </div>
+          </header>
 
           {/* Formulário */}
           <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col">
-            {/* Campo de entrada */}
             <div className="bg-input shadow-md rounded-lg p-4">
               <label
                 htmlFor="codeUser"
@@ -99,7 +112,7 @@ export default function Home() {
                 onChange={handleCodeUserChange}
                 placeholder="Digite o código"
                 required
-                maxLength={8} // Limita o input a 8 caracteres
+                maxLength={8}
                 aria-label="Código do usuário"
                 aria-describedby="codeUserHelp"
                 className={`w-full text-xl border-none bg-transparent rounded outline-none focus:outline-none transition-all duration-200 ${
@@ -118,12 +131,11 @@ export default function Home() {
               )}
             </div>
 
-            {/* Botão de envio */}
             <ButtonComponent
-              text={loading ? null : "Acessar"}
+              label={loading ? null : "Acessar"}
               type="submit"
-              disabled={loading}
-              loading={loading} // Estado de loading
+              isDisabled={loading}
+              isLoading={loading}
               className="mt-4 bg-orange-500"
             />
           </form>
@@ -131,4 +143,6 @@ export default function Home() {
       </div>
     </>
   );
-}
+};
+
+export default Home;

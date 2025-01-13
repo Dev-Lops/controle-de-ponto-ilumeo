@@ -34,18 +34,16 @@ export class SessionService {
   async fetchSessions(
     codeName: string
   ): Promise<{ sessions: Session[]; total: number }> {
-    if (!codeName) throw new Error("CodeName não pode ser vazio.");
+    if (this.isEmptyString(codeName)) {
+      throw new Error("O código do usuário (codeName) não pode ser vazio.");
+    }
 
     try {
       const response = await api.get(API_ENDPOINTS.FETCH_SESSIONS, {
         params: { codeName },
       });
 
-      // Validação dos dados retornados
-      if (!response.data.sessions || !Array.isArray(response.data.sessions)) {
-        console.error("Resposta inesperada da API:", response.data);
-        throw new Error("Formato da resposta da API não é válido.");
-      }
+      this.validateResponse(response);
 
       return {
         sessions: response.data.sessions.map((session: Session) => ({
@@ -59,19 +57,8 @@ export class SessionService {
         })),
         total: response.data.total || 0,
       };
-    } catch (error: unknown) {
-      if (axios.isAxiosError(error)) {
-        console.error(
-          "Erro ao buscar sessões:",
-          error.response?.data || error.message
-        );
-        throw new Error(
-          error.response?.data?.message || "Erro ao buscar sessões no servidor."
-        );
-      } else {
-        console.error("Erro desconhecido ao buscar sessões:", error);
-        throw new Error("Erro desconhecido ao buscar sessões.");
-      }
+    } catch (error) {
+      this.handleError(error, "Erro ao buscar sessões");
     }
   }
 
@@ -81,26 +68,49 @@ export class SessionService {
    * @returns Sessão salva
    */
   async saveSession(session: CreateSessionInput): Promise<Session> {
-    if (!session.codeName || !session.startTime || !session.endTime) {
-      throw new Error("Dados da sessão estão incompletos.");
-    }
+    this.validateSessionInput(session);
 
     try {
-      const response = await api.post("/sessions", session); 
+      const response = await api.post(API_ENDPOINTS.SAVE_SESSION, session);
+      this.validateResponse(response);
       return response.data;
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        console.error(
-          "Erro ao salvar sessão no servidor:",
-          error.response?.data || error.message
-        );
-        throw new Error(
-          error.response?.data?.message || "Erro ao salvar sessão no servidor."
-        );
-      } else {
-        console.error("Erro desconhecido ao salvar sessão:", error);
-        throw new Error("Erro desconhecido ao salvar sessão.");
-      }
+      this.handleError(error, "Erro ao salvar sessão");
+    }
+  }
+
+  /**
+   * Verifica se uma string está vazia.
+   * @param value - String a ser verificada
+   * @returns `true` se estiver vazia, caso contrário `false`
+   */
+  private isEmptyString(value: string): boolean {
+    return !value || typeof value !== "string" || value.trim() === "";
+  }
+
+  /**
+   * Valida a resposta da API.
+   * @param response - Resposta da API
+   */
+  private validateResponse(response: any): void {
+    if (!response || !response.data) {
+      throw new Error("Resposta da API está inválida ou vazia.");
+    }
+  }
+
+  /**
+   * Valida os dados da sessão antes do envio.
+   * @param session - Dados da sessão
+   */
+  private validateSessionInput(session: CreateSessionInput): void {
+    const { codeName, startTime, endTime } = session;
+
+    if (
+      this.isEmptyString(codeName) ||
+      this.isEmptyString(startTime) ||
+      this.isEmptyString(endTime)
+    ) {
+      throw new Error("Os dados da sessão estão incompletos ou inválidos.");
     }
   }
 
@@ -135,6 +145,12 @@ export class SessionService {
     return this.formatDuration(dayjs.duration(totalMilliseconds));
   }
 
+  /**
+   * Calcula o tempo decorrido entre dois horários.
+   * @param startTime - Hora inicial
+   * @param endTime - Hora final
+   * @returns Tempo decorrido em milissegundos
+   */
   private calculateElapsedTime(
     startTime: string,
     endTime: string | null
@@ -144,9 +160,31 @@ export class SessionService {
     return end.diff(start);
   }
 
+  /**
+   * Formata uma duração para uma string legível.
+   * @param durationObj - Objeto de duração do Day.js
+   * @returns Duração formatada
+   */
   private formatDuration(durationObj: Duration): string {
     const hours = Math.floor(durationObj.asHours());
     const minutes = durationObj.minutes();
     return `${hours}h ${minutes}m`;
+  }
+
+  /**
+   * Trata erros de forma consistente.
+   * @param error - Erro capturado
+   * @param defaultMessage - Mensagem de erro padrão
+   */
+  private handleError(error: unknown, defaultMessage: string): never {
+    if (axios.isAxiosError(error)) {
+      console.error(defaultMessage, error.response?.data || error.message);
+      throw new Error(
+        error.response?.data?.message || `${defaultMessage} no servidor.`
+      );
+    } else {
+      console.error(defaultMessage, error);
+      throw new Error(`${defaultMessage}.`);
+    }
   }
 }
